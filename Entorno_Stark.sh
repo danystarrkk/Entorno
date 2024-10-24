@@ -43,7 +43,7 @@ function installDependencias() {
   if [ $opt1 == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
-    yay -S google-chrome responsively visual-studio-code-bin git vim xorg-xsetroot zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm imagemagick -y
+    yay -S lees google-chrome responsively visual-studio-code-bin git vim xorg-xsetroot zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm imagemagick -y
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
