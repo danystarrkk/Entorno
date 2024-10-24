@@ -26,7 +26,7 @@ trap ctrl_c SIGINT
 ####### Varibles Globales ######
 
 rutaP="$HOME"
-rutaT="$HOME/Downloads/Entorno/configs"
+rutaT="$HOME/Descargas/Entorno/configs"
 
 ################################
 
@@ -43,7 +43,7 @@ function installDependencias() {
   if [ $opt1 == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
-    yay -S lees google-chrome responsively visual-studio-code-bin git vim xorg-xsetroot zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm imagemagick -y
+    sudo dnf install xsetroot google-chrome-stable git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick -y
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -67,7 +67,7 @@ function configuracionEntorno() {
 
   chmod +x $HOME/.config/bspwm/scripts/*
 
-  mkdir $rutaP/Pictures/.wallpaper
+  mkdir $rutaP/Imágenes/.wallpaper
   cp $rutaT/wallpaper/fondo.png $rutaP/Pictures/.wallpaper
 
   cp -r $rutaT/kitty $rutaP/.config
@@ -107,11 +107,8 @@ function configuracionEntorno() {
 
   sudo ln -s -f $rutaP/.zshrc /root/.zshrc
 
-  cp -r $rutaT/bin $rutaP/.config
-
   rm -rf ~/.config/polybar/
   cp -r $rutaT/polybar $HOME/.config
-  cp -r $rutaT/nvim $rutaP/.config
   cp -r $rutaT/rofi $rutaP/.config
 
   rofi-theme-selector &>/dev/null
