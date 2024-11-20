@@ -122,7 +122,7 @@ super + shift + ctrl + {h,j,k,l}
 super + alt + {h,j,k,l}
 	$HOME/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
 
-# LibreWolf
+# Firefox-dev
 super + shift f
-	/usr/bin/firefox
+  /usr/bin/firefox-aurora
 

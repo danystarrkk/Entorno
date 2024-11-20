@@ -43,7 +43,7 @@ function installDependencias() {
   if [ $opt1 == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
-    sudo dnf install xsetroot google-chrome-stable git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick -y
+    sudo dnf install neovim xsetroot google-chrome-stable git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick -y &>/dev/null
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -53,70 +53,77 @@ function installDependencias() {
     fi
 
   else
-    echo -e "\n${redColour}    [!] No se instalaran las dependecias, no se recomienda omitir este paso...  ${endColour}"
+    echo -e "\n\t${redColour}[!] No se instalaran las dependecias, no se recomienda omitir este paso...  ${endColour}"
   fi
 
 }
 
 function configuracionEntorno() {
 
-  echo -e "\n${turquoiseColour}[2] Configuración del Entorno: ${endColour}"
+  echo -en "\n${blueColour}[2] Desea configurar el Entorno [y/n]:${endColour}" && read opt1
 
-  cp -r $rutaT/bspwm $rutaP/.config
-  cp -r $rutaT/sxhkd $rutaP/.config
+  if [ $opt1 == "y" ]; then
 
-  chmod +x $HOME/.config/bspwm/scripts/*
+    echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
-  mkdir $rutaP/Imágenes/.wallpaper
-  cp $rutaT/wallpaper/fondo.png $rutaP/Pictures/.wallpaper
+    cp -r $rutaT/bspwm $rutaP/.config
+    cp -r $rutaT/sxhkd $rutaP/.config
 
-  cp -r $rutaT/kitty $rutaP/.config
-  sudo cp -r $rutaT/kitty /root/.config
+    chmod +x $HOME/.config/bspwm/scripts/*
 
-  sudo cp $rutaT/fonts/* /usr/share/fonts
+    cp -r $rutaT/files/.wallpaper $rutaP/Imágenes
+    cp -r $rutaT/nvim /rutaP/.config
 
-  cp -r $rutaT/picom $rutaP/.config
+    cp -r $rutaT/kitty $rutaP/.config
+    sudo cp -r $rutaT/kitty /root/.config
 
-  sudo mkdir /usr/share/zsh-sudo/
+    sudo cp $rutaT/fonts/* /usr/share/fonts
 
-  sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
+    cp -r $rutaT/picom $rutaP/.config
 
-  cd
+    sudo mkdir /usr/share/zsh-sudo/
 
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k &>/dev/null
+    sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
 
-  rm -rf $rutaP/.p10k.zsh
-  rm -rf $rutaP/.zshrc
+    cd
 
-  cp $rutaT/files/.zshrc $HOME
-  cp $rutaT/files/.p10k.zsh $HOME
-  cp $rutaT/files/.gitconfig $HOME
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k &>/dev/null
 
-  sudo touch /root/.zshrc
+    rm -rf $rutaP/.p10k.zsh
+    rm -rf $rutaP/.zshrc
 
-  sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k &>/dev/null
+    cp $rutaT/files/.zshrc $HOME
+    cp $rutaT/files/.p10k.zsh $HOME
+    cp $rutaT/files/.gitconfig $HOME
 
-  sudo rm -rf /root/.p10k.zsh
-  sudo rm -rf /root/.zshrc
+    sudo touch /root/.zshrc
 
-  sudo cp $rutaT/files_root/.zshrc /root
-  sudo cp $rutaT/files_root/.p10k.zsh /root
+    sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k &>/dev/null
 
-  sudo cp -r $rutaT/kitty /root/.config/
-  sudo cp -r $rutaT/nvim /root/.config/
+    sudo rm -rf /root/.p10k.zsh
+    sudo rm -rf /root/.zshrc
 
-  sudo ln -s -f $rutaP/.zshrc /root/.zshrc
+    sudo cp $rutaT/files_root/.zshrc /root
+    sudo cp $rutaT/files_root/.p10k.zsh /root
 
-  rm -rf ~/.config/polybar/
-  cp -r $rutaT/polybar $HOME/.config
-  cp -r $rutaT/rofi $rutaP/.config
+    sudo cp -r $rutaT/kitty /root/.config/
+    sudo cp -r $rutaT/nvim /root/.config/
 
-  rofi-theme-selector &>/dev/null
+    sudo ln -s -f $rutaP/.zshrc /root/.zshrc
 
-  if [ $(echo $?) -eq 0 ]; then
-    echo -e "\n${greenColour}    [+] Se completo la configuración del Entorno.... ${endColour}"
+    rm -rf ~/.config/polybar/
+    cp -r $rutaT/polybar $HOME/.config
+    cp -r $rutaT/rofi $rutaP/.config
+
+    rofi-theme-selector
+
+    if [ $(echo $?) -eq 0 ]; then
+      echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
+    else
+      echo -e "\n${redColour}[!] Error en la configuración del Entorno....${endColour}"
+    fi
   else
-    echo -e "\n${redColour}    [!] Error en la configuración del Entorno....${endColour}"
+    echo -e "${redColour}\n\t[!] Configuración del Entorno Cancelado...\n\n${endColour}"
   fi
 
 }
