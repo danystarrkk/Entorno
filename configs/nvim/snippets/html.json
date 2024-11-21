@@ -1,0 +1,23 @@
+{
+  "imagenes": {
+    "prefix": "im",
+    "body": [
+      "<picture>",
+      "\t<source srcset=\"$1.avif\" type=\"image/avif\" />",
+      "\t<source srcset=\"$2.webp\" type=\"image/webp\" />",
+      "<img loading=\"lazy\" width=\"500\" height=\"300\" src=\"$3.jpg\" alt=\"$4\"/>",
+      "</picture>"
+    ]
+  },
+  "imagenes 2": {
+    "prefix": "ims",
+    "body": [
+      "<picture>",
+      "\t<source\nsizes=\"1920w, 1280w,640w\"\nsrcset=\"img/imagen.avif 1920w,\nimg/imagen-1280.avif 1280w,\nimg/imagen-640.avif 640w\"\ntype=\"imagen/avif\">",
+      "\t<source\nsizes=\"1920w, 1280w,640w\"\nsrcset=\"img/imagen.webp 1920w,\nimg/imagen-1280.webp 1280w,\nimg/imagen-640.webp 640w\"\ntype=\"imagen/webp\">",
+      "\t<source\nsizes=\"1920w, 1280w,640w\"\nsrcset=\"img/imagen.jpg 1920w,\nimg/imagen-1280.jpg 1280w,\nimg/imagen-640.jpg 640w\"\ntype=\"imagen/jpg\">",
+      "\t<img lading=\"lazy\" decoding=\"async\" lazyalt=\"imagen\" src=\"img/imagen.png\" alt=\"header\" width=\"1000\" height=\"500\">",
+      "</picture>"
+    ]
+  }
+}

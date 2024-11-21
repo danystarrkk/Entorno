@@ -1,0 +1,16 @@
+{
+  "Media Query Min Width": {
+    "prefix": "@min",
+    "body": "@media (min-width:$1px){\n\t$2\n}",
+    "description": "Media Query Min"
+  },
+  "Box-sizing": {
+    "prefix": "box",
+    "body": "html{\n\tbox-sizing: border-box;\n\tfont-size: 62.5%;\n}\n*, *:before, *:after {\n\tnbox-sizing: inherit;\n}\nbody{\n\tfont-size: 1.6rem;\n}"
+  },
+  "Media Query Max Width": {
+    "prefix": "@max",
+    "body": "@media (max-width:$1px){\n\t$2\n}",
+    "description": "Media Query Max"
+  }
+}
