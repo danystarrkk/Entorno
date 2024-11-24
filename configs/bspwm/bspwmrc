@@ -21,7 +21,7 @@ bspc rule -a Screenkey manage=off
 vmware-user-suid-wrapper &
 
 # Wallpapers
-feh --bg-fill $HOME/Imágenes/.wallpaper/fondo.png
+feh --bg-fill $HOME/Pictures/.wallpaper/fondo.png
 
 # Polybar
 $HOME/.config/polybar/./launch.sh

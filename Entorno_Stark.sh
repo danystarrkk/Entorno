@@ -26,7 +26,7 @@ trap ctrl_c SIGINT
 ####### Varibles Globales ######
 
 rutaP="$HOME"
-rutaT="$HOME/Descargas/Entorno/configs"
+rutaT="$HOME/Downloads/Entorno/configs"
 
 ################################
 
@@ -43,9 +43,10 @@ function installDependencias() {
   if [ $opt1 == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
-    sudo dnf install neovim xsetroot google-chrome-stable git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick -y &>/dev/null
+    yay -S neovim xorg-xsetroot google-chrome git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick npm open-vm-tools vmname
 
     if [ $(echo $?) -eq 0 ]; then
+      clear
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
     else
       echo -e "${redColour}    [!] Error en la Instalación de Dependencias....${endColour}"
@@ -71,8 +72,8 @@ function configuracionEntorno() {
 
     chmod +x $HOME/.config/bspwm/scripts/*
 
-    cp -r $rutaT/files/.wallpaper $rutaP/Imágenes
-    cp -r $rutaT/nvim /rutaP/.config
+    cp -r $rutaT/files/.wallpaper $rutaP/Pictures
+    cp -r $rutaT/nvim /$rutaP/.config
 
     cp -r $rutaT/kitty $rutaP/.config
     sudo cp -r $rutaT/kitty /root/.config
@@ -84,6 +85,8 @@ function configuracionEntorno() {
     sudo mkdir /usr/share/zsh-sudo/
 
     sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
+    sudo systemctl enable vmtoolsd.service
+    sudo systemctl enable vmware-vmblock-fuse.service
 
     cd
 
