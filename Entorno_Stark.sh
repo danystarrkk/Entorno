@@ -27,6 +27,7 @@ trap ctrl_c SIGINT
 
 rutaP="$HOME"
 rutaT="$HOME/Downloads/Entorno/configs"
+rutaE="$HOME/Downloads/Entorno"
 
 ################################
 
@@ -42,6 +43,17 @@ function installDependencias() {
 
   if [ $opt1 == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
+
+    sudo pacman -Syu
+
+    sudo pacman -S --needed base-devel git -y &>/dev/null
+
+    git clone https://aur.archlinux.org/yay.git
+
+    mv yay configs
+    cd $rutaT/yay
+    makepkg -si
+    cd $rutaE
 
     yay -S responsively neovim xorg-xsetroot google-chrome git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick npm open-vm-tools vmname
 

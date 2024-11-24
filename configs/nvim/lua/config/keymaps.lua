@@ -1,9 +1,9 @@
 local keymapc = vim.api.nvim_set_keymap
 local keymap = vim.keymap.set
 
---global keymaps
+--Esc Keymap
 
-keymapc("i", "jk", "<ESC>", { noremap = true }) --Esc
+vim.keymap.set({ "i", "n", "v" }, "<C-c>", [[<C-\><C-n>]])
 
 -- Position cursor at the middle of the screen after scrolling half page
 keymap("n", "<C-d>", "<C-d>zz")
@@ -15,10 +15,6 @@ keymap("i", "<C-b>", "<C-o>de")
 -- Live-server
 keymap("n", "<leader>ws", ":LiveServerStart<CR>")
 keymap("n", "<leader>wt", ":LiveServerStop<CR>")
-
--- Move buffers
-keymap("n", "<leader>h", ":bprevious<CR>")
-keymap("n", "<leader>l", ":bNext<CR>")
 
 -- LoremIps
 keymap("n", "<leader>wl", ":LoremIpsum paragraphs")
