@@ -43,7 +43,7 @@ function installDependencias() {
   if [ $opt1 == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
-    yay -S neovim xorg-xsetroot google-chrome git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick npm open-vm-tools vmname
+    yay -S responsively neovim xorg-xsetroot google-chrome git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick npm open-vm-tools vmname
 
     if [ $(echo $?) -eq 0 ]; then
       clear
@@ -66,7 +66,7 @@ function configuracionEntorno() {
   if [ $opt1 == "y" ]; then
 
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
-
+    
     cp -r $rutaT/bspwm $rutaP/.config
     cp -r $rutaT/sxhkd $rutaP/.config
 

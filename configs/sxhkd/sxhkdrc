@@ -126,3 +126,6 @@ super + alt + {h,j,k,l}
 super + shift f
   /usr/bin/firefox-aurora
 
+# Responsively
+super + shift + ctrl + r
+  /usr/bin/responsively
