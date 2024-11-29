@@ -3,7 +3,7 @@ local keymap = vim.keymap.set
 
 --Esc Keymap
 
-vim.keymap.set({ "i", "n", "v" }, "<C-c>", [[<C-\><C-n>]])
+keymap({ "i", "v" }, "jk", "<ESC>", { noremap = true }) --Esc
 
 -- Position cursor at the middle of the screen after scrolling half page
 keymap("n", "<C-d>", "<C-d>zz")

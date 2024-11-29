@@ -1,18 +1,20 @@
 return {
   {
-    "navarasu/onedark.nvim",
-    name = "onedark",
+    "marko-cerovac/material.nvim",
+    name = "material",
     lazy = false,
     opts = {
-      style = "deep",
-      transparent = true,
-      term_colors = true,
+      lualine_style = "stealth",
+      disable = {
+        background = true,
+        term_colors = true,
+      },
     },
   },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "onedark",
+      colorscheme = "material",
     },
   },
 }
