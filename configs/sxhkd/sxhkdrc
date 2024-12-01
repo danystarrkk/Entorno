@@ -4,11 +4,11 @@
 
 # terminal emulator
 super + Return
-	/usr/bin/kitty
+  /usr/bin/kitty
 
 # program launcher
 super + d
-	/usr/bin/rofi -show drun
+  /usr/bin/rofi -show drun
 
 super + r
   $HOME/.config/rofi/bin/runner
@@ -18,7 +18,7 @@ super + p
 
 # make sxhkd reload its configuration files:
 super + Escape
-	pkill -USR1 -x sxhkd
+  pkill -USR1 -x sxhkd
 
 #
 # bspwm hotkeys
@@ -129,3 +129,7 @@ super + shift f
 # Responsively
 super + shift + ctrl + r
   /usr/bin/responsively
+
+# Flameshot
+super + shift + s
+  /usr/bin/flameshot gui
