@@ -55,7 +55,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S notion-app-nativefier xclip xsel responsively neovim xorg-xsetroot google-chrome git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick npm open-vm-tools vmname
+    yay -S xclip xsel responsively neovim xorg-xsetroot google-chrome git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick npm open-vm-tools vmname
 
     if [ $(echo $?) -eq 0 ]; then
       clear
