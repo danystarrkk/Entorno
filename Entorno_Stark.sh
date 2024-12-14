@@ -55,7 +55,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S flameshot xclip xsel responsively neovim xorg-xsetroot google-chrome git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm ImageMagick npm open-vm-tools vmname
+    yay -S xclip xsel xorg-xsetroot git zsh zsh-syntax-highlighting bat lsd npm
 
     if [ $(echo $?) -eq 0 ]; then
       clear
@@ -79,27 +79,11 @@ function configuracionEntorno() {
 
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
-    cp -r $rutaT/bspwm $rutaP/.config
-    cp -r $rutaT/sxhkd $rutaP/.config
-
-    chmod +x $HOME/.config/bspwm/scripts/*
-
-    cp -r $rutaT/files/.wallpaper $rutaP/Pictures
-    cp -r $rutaT/nvim /$rutaP/.config
-
-    cp -r $rutaT/kitty $rutaP/.config
-    sudo cp -r $rutaT/kitty /root/.config
-
     sudo cp $rutaT/fonts/* /usr/share/fonts
-
-    cp -r $rutaT/picom $rutaP/.config
 
     sudo mkdir /usr/share/zsh-sudo/
 
     sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
-    sudo systemctl enable vmtoolsd.service
-    sudo systemctl enable vmware-vmblock-fuse.service
-
     cd
 
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k &>/dev/null
@@ -125,12 +109,6 @@ function configuracionEntorno() {
     sudo cp -r $rutaT/nvim /root/.config/
 
     sudo ln -s -f $rutaP/.zshrc /root/.zshrc
-
-    rm -rf ~/.config/polybar/
-    cp -r $rutaT/polybar $HOME/.config
-    cp -r $rutaT/rofi $rutaP/.config
-
-    rofi-theme-selector
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
