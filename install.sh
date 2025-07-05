@@ -110,6 +110,15 @@ function configuracionEntorno() {
     cp -r $rutaT/polybar $HOME/.config
     cp -r $rutaT/rofi $rutaP/.config
 
+    chmod +x ~/.config/bspwm/bspwmrc
+    chmod +x ~/.config/bspwm/scripts/*
+    chmod +x ~/.config/polybar/launch.sh
+
+    cd
+
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+
     rofi-theme-selector
 
     if [ $(echo $?) -eq 0 ]; then
