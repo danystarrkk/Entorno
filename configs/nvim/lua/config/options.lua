@@ -1,1 +1,1 @@
-vim.g.material_style = "deep ocean"
+vim.opt.textwidth = 80

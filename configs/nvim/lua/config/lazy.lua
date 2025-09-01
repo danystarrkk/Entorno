@@ -53,19 +53,3 @@ require("lazy").setup({
 })
 
 require("nvim_comment").setup()
-require("neo-tree").setup({
-  event_handlers = {
-    {
-      event = "file_open_requested",
-      handler = function()
-        require("neo-tree.command").execute({ action = "close" })
-      end,
-    },
-  },
-})
-
-require("ufo").setup({
-  provider_selector = function(bufnr, filetype, buftype)
-    return { "treesitter", "indent" }
-  end,
-})

@@ -26,8 +26,8 @@ trap ctrl_c SIGINT
 ####### Varibles Globales ######
 
 rutaP="$HOME"
-rutaT="$HOME/Downloads/Entorno/configs"
-rutaE="$HOME/Downloads/Entorno"
+rutaT="$HOME/Descargas/Entorno/configs"
+rutaE="$HOME/Descargas/Entorno"
 
 ################################
 
@@ -37,7 +37,7 @@ function installDependencias() {
 
   sudo apt update -y && sudo apt upgrade -y
 
-  sudo apt install net-tools flameshot xclip xsel neovim git vim zsh bspwm sxhkd picom polybar rofi nitrogen kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash
+  sudo apt install net-tools xclip xsel neovim git vim zsh bspwm sxhkd picom polybar rofi nitrogen kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash
 
   if [ $(echo $?) -eq 0 ]; then
     clear

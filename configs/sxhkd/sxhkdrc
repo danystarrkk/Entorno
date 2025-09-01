@@ -122,13 +122,10 @@ super + shift + ctrl + {h,j,k,l}
 super + alt + {h,j,k,l}
 	$HOME/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
 
-# Flameshot
-super + shift + s
-  /usr/bin/flameshot gui
 
 # Firefox
 super + shift + f
-  /opt/firefox/firefox
+  /bin/firefox
 
 # Burpsuite
 super + shift + b
