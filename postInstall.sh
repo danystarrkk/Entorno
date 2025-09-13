@@ -57,7 +57,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S net-tools flameshot xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip lightdm lightdm-webkit2-greeter lightdm-webkit-theme-glorious wget curl
+    yay -S net-tools flameshot xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -139,20 +139,10 @@ function configuracionEntorno() {
     cp -r $rutaT/polybar $HOME/.config
     cp -r $rutaT/rofi $rutaP/.config
 
-    echo -e "${blueColour}[+] Configurando LightDM con tema Glorious...${endColour}"
+    echo -e "${blueColour}[+] Instalando SDDM mínimo...${endColour}"
 
-    # Habilitar el servicio de LightDM
-    sudo systemctl enable lightdm.service
-
-    # Configurar LightDM para usar el greeter webkit2
-    sudo sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/' /etc/lightdm/lightdm.conf
-
-    # Configurar el tema Glorious
-    sudo sed -i 's/^#webkit-theme\s*=\s*$/webkit-theme = glorious/' /etc/lightdm/lightdm-webkit2-greeter.conf
-    sudo sed -i 's/^#webkit-mode\s*=\s*$/webkit-mode = light/' /etc/lightdm/lightdm-webkit2-greeter.conf
-
-    # Configurar para auto-detectar usuario
-    sudo sed -i 's/^#remember-user\s*=\s*$/remember-user = true/' /etc/lightdm/lightdm.conf
+    # Habilitar el servicio de SDDM
+    sudo systemctl enable sddm.service
 
     # Crear archivo de sesión para bspwm
     sudo tee /usr/share/xsessions/bspwm.desktop >/dev/null <<'EOF'
@@ -161,32 +151,7 @@ Name=bspwm
 Comment=Binary space partitioning window manager
 Exec=bspwm
 Type=Application
-Icon=bspwm
 EOF
-
-    # Configurar sesión por defecto (opcional - puede elegirse desde el greeter)
-    sudo sed -i 's/^#user-session\s*=\s*$/user-session=bspwm/' /etc/lightdm/lightdm.conf
-
-    # Configurar fondo de pantalla del login (opcional)
-    sudo sed -i 's/^#background\s*=\s*$/background=\/usr\/share\/backgrounds\/archlinux\/arch-wallpaper.jpg/' /etc/lightdm/lightdm.conf
-
-    # Crear directorio de backgrounds si no existe
-    sudo mkdir -p /usr/share/backgrounds/archlinux
-
-    # Descargar un wallpaper por defecto para LightDM
-    sudo curl -o /usr/share/backgrounds/archlinux/arch-wallpaper.jpg https://raw.githubusercontent.com/archlinux/artwork/master/wallpapers/archlinux/arch-wallpaper.jpg
-
-    # Configurar para que se muestre el selector de sesiones
-    sudo sed -i 's/^#show-desktoppicker\s*=\s*$/show-desktoppicker=true/' /etc/lightdm/lightdm-webkit2-greeter.conf
-
-    # Ajustar permisos
-    sudo chmod 755 /etc/lightdm/lightdm.conf
-    sudo chmod 755 /etc/lightdm/lightdm-webkit2-greeter.conf
-
-    echo -e "${greenColour}[+] LightDM configurado con tema Glorious${endColour}"
-    echo -e "${yellowColour}[*] Tema: Glorious (modo claro)${endColour}"
-    echo -e "${yellowColour}[*] Sesiones disponibles: bspwm${endColour}"
-    echo -e "${yellowColour}[*] Recordar usuario: Activado${endColour}"
 
     echo -e "${blueColour}[+] Configurando Kali Linux en Docker...${endColour}"
 
