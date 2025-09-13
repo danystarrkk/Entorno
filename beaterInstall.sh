@@ -193,7 +193,33 @@ sudo -u $USERNAME mkdir -p /home/$USERNAME/{Desktop,Documents,Downloads,Music,Pi
 EOF
 
 # =============================================================================
-# PASO 8: INSTALACIÓN DE OPEN-VM-TOOLS
+# PASO 8: INSTALACIÓN DE BLACKARCH REPOSITORY
+# =============================================================================
+info "Instalando repositorio BlackArch..."
+
+arch-chroot /mnt /bin/bash <<EOF
+# Descargar e instalar BlackArch
+curl -O https://blackarch.org/strap.sh
+chmod +x strap.sh
+./strap.sh
+
+# Limpiar instalación
+rm strap.sh
+
+# Configurar prioridades para evitar conflictos
+cat << PACMAN >> /etc/pacman.conf
+[blackarch]
+Include = /etc/pacman.d/blackarch-mirrorlist
+
+# Prioridades para evitar conflictos
+[options]
+CacheDir = /var/cache/pacman/pkg/
+CleanMethod = KeepCurrent
+PACMAN
+EOF
+
+# =============================================================================
+# PASO 9: INSTALACIÓN DE OPEN-VM-TOOLS
 # =============================================================================
 info "Instalando y configurando open-vm-tools..."
 
@@ -207,7 +233,7 @@ systemctl enable vmware-vmblock-fuse.service
 EOF
 
 # =============================================================================
-# PASO 9: INSTALACIÓN Y CONFIGURACIÓN DE GRUB (BIOS)
+# PASO 10: INSTALACIÓN Y CONFIGURACIÓN DE GRUB (BIOS)
 # =============================================================================
 info "Instalando GRUB bootloader..."
 
@@ -220,7 +246,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
 # =============================================================================
-# PASO 10: HABILITAR SERVICIOS ESENCIALES
+# PASO 11: HABILITAR SERVICIOS ESENCIALES
 # =============================================================================
 info "Configurando servicios esenciales..."
 
@@ -235,7 +261,7 @@ echo "vm.vfs_cache_pressure=50" >> /etc/sysctl.d/99-vm.conf
 EOF
 
 # =============================================================================
-# PASO 11: LIMPIEZA Y FINALIZACIÓN
+# PASO 12: LIMPIEZA Y FINALIZACIÓN
 # =============================================================================
 info "Finalizando instalación..."
 
