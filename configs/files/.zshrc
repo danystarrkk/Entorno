@@ -48,9 +48,9 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 # Custom Aliases
 # -----------------------------------------------
 # bat
-alias cat='/bin/batcat'
-alias catn='/bin/batcat --style=plain'
-alias catnp='/bin/batcat --style=plain --paging=never'
+alias cat='/bin/bat'
+alias catn='/bin/bat--style=plain'
+alias catnp='/bin/bat--style=plain --paging=never'
  
 # ls
 alias ll='/bin/lsd -lh --group-dirs=first'

@@ -265,12 +265,13 @@ EOF
 
     chmod +x scripts/quick-analysis.sh
 
-    echo -e "${greenColour}[+] Configuración completada!${endColour}"
-    echo -e "${blueColour}[+] Para usar Kali Docker:${endColour}"
-    echo -e "  ${greenColour}1. Construir imagen: ${endColour}cd ~/kali-analysis && docker build -t kali-analysis ."
-    echo -e "  ${greenColour}2. Ejecutar: ${endColour}./kali-analysis.sh"
-    echo -e "  ${greenColour}3. Colocar binarios en: ${endColour}~/kali-analysis/binaries/"
-    echo -e "  ${greenColour}4. Los reports se guardan en: ${endColour}~/kali-analysis/reports/"
+    cd
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+
+    sudo cd
+    sudo git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    sudo ~/.fzf/install
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
