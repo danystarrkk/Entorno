@@ -57,7 +57,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S net-tools flameshot xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl
+    yay -S net-tools flameshot xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -81,8 +81,10 @@ function configuracionEntorno() {
 
     wget -P $rutaT wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
     unzip $rutaT/Hack.zip -d $rutaT/fonts
-
     rm -rf $rutaT/Hack.zip
+
+    mkdir $rutaP/.config/bin
+    touch $rutaP/.config/bin/target
 
     cp -r $rutaT/bspwm $rutaP/.config
     cp -r $rutaT/sxhkd $rutaP/.config

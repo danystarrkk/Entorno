@@ -39,3 +39,6 @@ xsetroot -cursor_name left_ptr &
 
 #Keyboar config
 setxkbmap -layout us -variant alt-intl
+
+#arandr
+xrandr --output Virtual-1 --auto

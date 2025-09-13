@@ -9,8 +9,8 @@ fi
 # Created by newuser for 5.9
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 
-if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 if [ -f /usr/share/zsh-sudo/sudo.plugin.zsh ]; then
