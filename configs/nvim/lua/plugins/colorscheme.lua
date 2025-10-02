@@ -1,14 +1,14 @@
 return {
   {
-    "AlexvZyl/nordic.nvim",
-    name = "nordic",
+    "tiagovla/tokyodark.nvim",
+    name = "tokyodark",
     lazy = false,
     opts = {},
   },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "nordic",
+      colorscheme = "tokyodark",
     },
   },
 }
