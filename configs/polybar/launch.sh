@@ -1,15 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Mata instancias previas
+# Terminate already running bar instances
 killall -q polybar
 
-# Espera a que terminen
-while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
+# Launch bar1 and bar2
+echo "---" | tee -a /tmp/polybar1.log /tmp/polybar2.log
 
-# Lanza cada barra
-polybar logo -c ~/.config/polybar/config.ini &
-polybar workspaces -c ~/.config/polybar/config.ini &
-polybar top-ip -c ~/.config/polybar/config.ini &
-polybar top-target -c ~/.config/polybar/config.ini &
-polybar top-status -c ~/.config/polybar/config.ini &
-polybar top-time -c ~/.config/polybar/config.ini &
+#polybar example  >>/tmp/polybar1.log 2>&1 &
+polybar top -r >>/tmp/polybar1.log 2>&1 & disown
+
+echo "Bars launched..."
+

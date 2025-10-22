@@ -1,14 +1,16 @@
 return {
   {
-    "tiagovla/tokyodark.nvim",
-    name = "tokyodark",
+    "marko-cerovac/material.nvim",
+    name = "material",
     lazy = false,
-    opts = {},
+    opts = {
+      material_style = "deep ocenan",
+    },
   },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "tokyodark",
+      colorscheme = "material",
     },
   },
 }
