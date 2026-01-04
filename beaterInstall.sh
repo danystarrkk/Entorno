@@ -207,6 +207,7 @@ chmod +x strap.sh
 rm strap.sh
 
 # Prioridades para evitar conflictos
+cat << PACMAN >> /etc/pacman.conf
 [options]
 CacheDir = /var/cache/pacman/pkg/
 CleanMethod = KeepCurrent
