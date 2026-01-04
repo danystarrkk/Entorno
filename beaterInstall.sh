@@ -206,11 +206,6 @@ chmod +x strap.sh
 # Limpiar instalación
 rm strap.sh
 
-# Configurar prioridades para evitar conflictos
-cat << PACMAN >> /etc/pacman.conf
-[blackarch]
-Include = /etc/pacman.d/blackarch-mirrorlist
-
 # Prioridades para evitar conflictos
 [options]
 CacheDir = /var/cache/pacman/pkg/
