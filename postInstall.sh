@@ -48,6 +48,19 @@ function installDependencias() {
 
     sudo pacman -S --needed base-devel git -y &>/dev/null
 
+    echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
+
+    curl -O https://blackarch.org/strap.sh
+    chmod +x strap.sh
+    sudo ./strap.sh
+    rm -f strap.sh
+
+    sudo pacman -Syu
+
+    sudo pacman -S --needed nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python
+
+    echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
+
     echo -e "${blueColour}[+] Instalando yay ${endColour}\n"
 
     git clone https://aur.archlinux.org/yay.git
