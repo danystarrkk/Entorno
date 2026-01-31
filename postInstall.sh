@@ -57,7 +57,7 @@ function installDependencias() {
 
     sudo pacman -Syu
 
-    sudo pacman -S --needed nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python
+    sudo pacman -S --needed nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts
 
     echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
 
