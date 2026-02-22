@@ -46,7 +46,7 @@ function installDependencias() {
 
     sudo pacman -Syu
 
-    sudo pacman -S --needed base-devel git -y &>/dev/null
+    sudo pacman -S --needed base-devel git
 
     echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
 
