@@ -57,7 +57,7 @@ function installDependencias() {
 
     sudo pacman -Syu
 
-    sudo pacman -S --needed nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs flameshot
+    sudo pacman -S --needed nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
 
     echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
 
@@ -70,7 +70,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox flameshot less tree ripgrep
+    yay -S net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -92,6 +92,7 @@ function configuracionEntorno() {
 
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
+  	xdg-user-dirs-update --force
     wget -P $rutaT wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
     unzip $rutaT/Hack.zip -d $rutaT/fonts
     rm -rf $rutaT/Hack.zip
