@@ -41,7 +41,7 @@ function installDependencias() {
 
   echo -en "${turquoiseColour}[1] Instalar dependencias [y/n]: ${endColour}" && read opt1
 
-  if [ $opt1 == "y" ]; then
+  if [ "$opt1" == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
     sudo pacman -Syu
@@ -88,7 +88,7 @@ function configuracionEntorno() {
 
   echo -en "\n${blueColour}[2] Desea configurar el Entorno [y/n]:${endColour}" && read opt1
 
-  if [ $opt1 == "y" ]; then
+  if [ "$opt1" == "y" ]; then
 
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
