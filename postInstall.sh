@@ -16,70 +16,181 @@ grayColour="\e[0;37m\033[1m"
 ########## Salir ########
 
 function ctrl_c() {
-  echo -e "\n${redColour}[!] Saliendo...${endColour}"
-  exit 1
+  echo -e ""
 }
 
 trap ctrl_c SIGINT
 
 #########################
 
-####### Variables Globales ######
+####### Varibles Globales ######
 
 rutaP="$HOME"
 rutaT="$HOME/Entorno/configs"
 rutaE="$HOME/Entorno/"
-SWAP_PATH="/swapfile"
-SWAP_SIZE_GB=14
 
 ################################
 
 ############## Funciones Globales #############
 
 function installDependencias() {
-  clear
-  echo -e "\n\t ${blueColour} Instalación del Entorno \n\n${endColour}"
-  echo -en "${turquoiseColour}[1] Instalar dependencias [y/n]: ${endColour}" && read opt1
 
-  if [ "$opt1" == "y" ]; then
-    echo -e "\n${purpleColour}    [+] Instalando Dependencias (Modo No-Confirm)...${endColour}"
+  clear
 
-    # Agregado --noconfirm a pacman
-    sudo pacman -Syu --noconfirm
-    sudo pacman -S --needed --noconfirm base-devel git
+  echo -e "\n\t ${blueColour} Instalación del Entorno \n\n${endColour}"
 
-    echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
-    curl -O https://blackarch.org/strap.sh
-    chmod +x strap.sh
-    sudo ./strap.sh
-    rm -f strap.sh
+  echo -en "${turquoiseColour}[1] Instalar dependencias [y/n]: ${endColour}" && read opt1
 
-    sudo pacman -Syu --noconfirm 
-    sudo pacman -S --needed --noconfirm qemu-guest-agent spice-vdagent nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
+  if [ $opt1 == "y" ]; then
+    echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
-    echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
-    echo -e "${blueColour}[+] Instalando yay ${endColour}\n"
+    sudo pacman -Syu
 
-    git clone https://aur.archlinux.org/yay.git
-    mkdir -p "$rutaT"
-    mv yay "$rutaT/"
-    cd "$rutaT/yay" || exit
-    makepkg -si --noconfirm
-    cd "$rutaE" || exit
+    sudo pacman -S --needed base-devel git
 
-    # Agregado --noconfirm a yay
-    yay -S --noconfirm net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
+    echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
 
-    if [ $? -eq 0 ]; then
-      echo -e "${greenColour}    [+] Instalación de dependencias completada correctamente${endColour}"
-    else
-      echo -e "${redColour}    [!] Error en la Instalación de Dependencias${endColour}"
-    fi
-  else
-    echo -e "\n\t${redColour}[!] No se instalaran las dependecias...${endColour}"
-  fi
+    curl -O https://blackarch.org/strap.sh
+    chmod +x strap.sh
+    sudo ./strap.sh
+    rm -f strap.sh
+
+    sudo pacman -Syu
+
+    sudo pacman -S --needed --noconfirm nmap qemu-guest-agent spice-vdagent whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
+
+    echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
+
+    echo -e "${blueColour}[+] Instalando yay ${endColour}\n"
+
+    git clone https://aur.archlinux.org/yay.git
+
+    mv yay configs
+    cd $rutaT/yay
+    makepkg -si
+    cd $rutaE
+
+    yay -S --noconfirm net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
+
+    if [ $(echo $?) -eq 0 ]; then
+      echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
+    else
+      echo -e "${redColour}    [!] Error en la Instalación de Dependencias....${endColour}"
+    fi
+
+  else
+    echo -e "\n\t${redColour}[!] No se instalaran las dependecias, no se recomienda omitir este paso...  ${endColour}"
+  fi
+
 }
 
+function configuracionEntorno() {
+
+  echo -en "\n${blueColour}[2] Desea configurar el Entorno [y/n]:${endColour}" && read opt1
+
+  if [ $opt1 == "y" ]; then
+
+    echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
+
+  	xdg-user-dirs-update --force
+    wget -P $rutaT wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+    unzip $rutaT/Hack.zip -d $rutaT/fonts
+    rm -rf $rutaT/Hack.zip
+
+    mkdir $rutaP/.config/bin
+    touch $rutaP/.config/bin/target
+
+    cp -r $rutaT/bspwm $rutaP/.config
+    cp -r $rutaT/sxhkd $rutaP/.config
+
+    chsh -s /bin/zsh
+    sudo chsh -s /bin/zsh
+
+    chmod +x $HOME/.config/bspwm/scripts/*
+
+    cp -r $rutaT/wallpapers $rutaP/Pictures
+    cp -r $rutaT/nvim $rutaP/.config
+
+    cp -r $rutaT/kitty $rutaP/.config
+    sudo cp -r $rutaT/kitty /root/.config
+
+    sudo cp $rutaT/fonts/* /usr/share/fonts
+
+    cp -r $rutaT/picom $rutaP/.config
+
+    sudo mkdir /usr/share/zsh-sudo/
+
+    sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
+    sudo systemctl enable vmtoolsd.service
+    sudo systemctl enable vmware-vmblock-fuse.service
+    sudo systemctl enable qemu-guest-agent
+    sudo systemctl enable spice-vdagentd
+    sudo systemctl enable docker.service
+
+    cd
+
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k &>/dev/null
+
+    rm -rf $rutaP/.p10k.zsh
+    rm -rf $rutaP/.zshrc
+
+    cp $rutaT/files/.zshrc $HOME
+    cp $rutaT/files/.p10k.zsh $HOME
+    cp $rutaT/files/.gitconfig $HOME
+
+    sudo touch /root/.zshrc
+
+    sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k &>/dev/null
+
+    sudo rm -rf /root/.p10k.zsh
+    sudo rm -rf /root/.zshrc
+
+    sudo cp $rutaT/files_root/.zshrc /root
+    sudo cp $rutaT/files_root/.p10k.zsh /root
+
+    sudo cp -r $rutaT/kitty /root/.config/
+    sudo cp -r $rutaT/nvim /root/.config/
+
+    sudo ln -s -f $rutaP/.zshrc /root/.zshrc
+
+    rm -rf ~/.config/polybar/
+    cp -r $rutaT/polybar $HOME/.config
+    cp -r $rutaT/rofi $rutaP/.config
+
+    echo -e "${blueColour}[+] Instalando SDDM mínimo...${endColour}"
+
+    # Habilitar el servicio de SDDM
+    sudo systemctl enable sddm.service
+
+    # Crear archivo de sesión para bspwm
+    sudo tee /usr/share/xsessions/bspwm.desktop >/dev/null <<'EOF'
+[Desktop Entry]
+Name=bspwm
+Comment=Binary space partitioning window manager
+Exec=bspwm
+Type=Application
+EOF
+
+    sudo pacman -Syu burpsuite whatweb seclists netcat
+
+    cd
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+
+    sudo cd
+    sudo git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    sudo ~/.fzf/install
+
+    if [ $(echo $?) -eq 0 ]; then
+      echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
+    else
+      echo -e "\n${redColour}[!] Error en la configuración del Entorno....${endColour}"
+    fi
+  else
+    echo -e "${redColour}\n\t[!] Configuración del Entorno Cancelado...\n\n${endColour}"
+  fi
+
+}
 function configurarHibernacion() {
   echo -e "\n${blueColour}[3] Configurando Swapfile de ${SWAP_SIZE_GB}GB para Hibernación...${endColour}"
 
@@ -114,116 +225,8 @@ function configurarHibernacion() {
   echo -e "${greenColour}[+] Hibernación configurada correctamente${endColour}"
 }
 
-function configuracionEntorno() {
-  echo -en "\n${blueColour}[2] Desea configurar el Entorno [y/n]:${endColour}" && read opt1
-
-  if [ "$opt1" == "y" ]; then
-    echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
-
-    xdg-user-dirs-update --force
-    wget -P "$rutaT" https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
-    unzip "$rutaT/Hack.zip" -d "$rutaT/fonts"
-    rm -rf "$rutaT/Hack.zip"
-
-    mkdir -p "$rutaP/.config/bin"
-    touch "$rutaP/.config/bin/target"
-
-    cp -r "$rutaT/bspwm" "$rutaP/.config"
-    cp -r "$rutaT/sxhkd" "$rutaP/.config"
-
-    chsh -s /bin/zsh "$USER"
-    sudo chsh -s /bin/zsh root
-
-    chmod +x "$HOME"/.config/bspwm/scripts/*
-
-    cp -r "$rutaT/wallpapers" "$rutaP/Pictures"
-    cp -r "$rutaT/nvim" "$rutaP/.config"
-
-    cp -r "$rutaT/kitty" "$rutaP/.config"
-    sudo cp -r "$rutaT/kitty" /root/.config
-
-    sudo cp "$rutaT"/fonts/* /usr/share/fonts
-
-    cp -r "$rutaT/picom" "$rutaP/.config"
-
-    sudo mkdir -p /usr/share/zsh-sudo/
-    sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
-    
-    sudo systemctl enable vmtoolsd.service
-    sudo systemctl enable vmware-vmblock-fuse.service
-    sudo systemctl enable docker.service
-
-    cd "$HOME" || exit
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k &>/dev/null
-
-    rm -rf "$rutaP"/.p10k.zsh "$rutaP"/.zshrc
-    cp "$rutaT/files/.zshrc" "$HOME"
-    cp "$rutaT/files/.p10k.zsh" "$HOME"
-    cp "$rutaT/files/.gitconfig" "$HOME"
-
-    sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k &>/dev/null
-    sudo rm -rf /root/.p10k.zsh /root/.zshrc
-    sudo cp "$rutaT/files_root/.zshrc" /root
-    sudo cp "$rutaT/files_root/.p10k.zsh" /root
-    sudo cp -r "$rutaT/kitty" /root/.config/
-    sudo cp -r "$rutaT/nvim" /root/.config/
-
-    rm -rf ~/.config/polybar/
-    cp -r "$rutaT/polybar" "$HOME/.config"
-    cp -r "$rutaT/rofi" "$rutaP/.config"
-
-    echo -e "${blueColour}[+] Instalando SDDM mínimo...${endColour}"
-    sudo systemctl enable sddm.service
-
-    sudo tee /usr/share/xsessions/bspwm.desktop >/dev/null <<'EOF'
-[Desktop Entry]
-Name=bspwm
-Comment=Binary space partitioning window manager
-Exec=bspwm
-Type=Application
-EOF
-
-    sudo pacman -Syu --noconfirm burpsuite whatweb seclists netcat
-
-    # Instalación de fzf mejorada (all para evitar prompts)
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install --all
-
-    sudo git clone --depth 1 https://github.com/junegunn/fzf.git /root/.fzf
-    sudo /root/.fzf/install --all
-
-    if [ $? -eq 0 ]; then
-      echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
-    else
-      echo -e "\n${redColour}[!] Error en la configuración del Entorno....${endColour}"
-    fi
-  else
-    echo -e "${redColour}\n\t[!] Configuración del Entorno Cancelada...\n\n${endColour}"
-  fi
-}
-
-function installVirtio() {
-    echo -e "\n${blueColour}[+] Configurando drivers VirtIO y Guest Agent...${endColour}"
-    
-    # Instalación
-    sudo pacman -S --noconfirm qemu-guest-agent spice-vdagent
-    
-    # Habilitar servicios
-    sudo systemctl enable qemu-guest-agent
-    sudo systemctl enable spice-vdagentd
-    
-    # Inyectar módulos en mkinitcpio para carga temprana
-    if ! grep -q "virtio_pci" /etc/mkinitcpio.conf; then
-        sudo sed -i 's/MODULES=(/MODULES=(virtio virtio_pci virtio_net virtio_blk /' /etc/mkinitcpio.conf
-        sudo mkinitcpio -P
-    fi
-    
-    echo -e "${greenColour}[+] Configuración de VirtIO completada${endColour}"
-}
-
 ##### Orden de Ejecución #########
 
 installDependencias
-installVirtio
-configurarHibernacion
 configuracionEntorno
+configurarHibernacion
