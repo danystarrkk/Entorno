@@ -21,6 +21,7 @@ sxhkd &
 
 # Copy and Paste
 vmware-user-suid-wrapper &
+spice-vdagent &
 
 # Wallpapers
 nitrogen --restore
