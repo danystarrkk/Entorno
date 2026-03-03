@@ -54,8 +54,8 @@ function installDependencias() {
     sudo ./strap.sh
     rm -f strap.sh
 
-    sudo pacman -Syu --noconfirm
-    sudo pacman -S --needed --noconfirm nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
+    sudo pacman -Syu --noconfirm 
+    sudo pacman -S --needed --noconfirm qemu-guest-agent spice-vdagent nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
 
     echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
     echo -e "${blueColour}[+] Instalando yay ${endColour}\n"
@@ -202,8 +202,28 @@ EOF
   fi
 }
 
+function installVirtio() {
+    echo -e "\n${blueColour}[+] Configurando drivers VirtIO y Guest Agent...${endColour}"
+    
+    # Instalación
+    sudo pacman -S --noconfirm qemu-guest-agent spice-vdagent
+    
+    # Habilitar servicios
+    sudo systemctl enable qemu-guest-agent
+    sudo systemctl enable spice-vdagentd
+    
+    # Inyectar módulos en mkinitcpio para carga temprana
+    if ! grep -q "virtio_pci" /etc/mkinitcpio.conf; then
+        sudo sed -i 's/MODULES=(/MODULES=(virtio virtio_pci virtio_net virtio_blk /' /etc/mkinitcpio.conf
+        sudo mkinitcpio -P
+    fi
+    
+    echo -e "${greenColour}[+] Configuración de VirtIO completada${endColour}"
+}
+
 ##### Orden de Ejecución #########
 
 installDependencias
-configurarHibernacion # <--- Nueva función
+installVirtio
+configurarHibernacion
 configuracionEntorno
