@@ -70,7 +70,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S --noconfirm qemu-guest-agent spice-vdagent net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
+    yay -S --noconfirm net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -124,8 +124,6 @@ function configuracionEntorno() {
     sudo systemctl enable vmtoolsd.service
     sudo systemctl enable vmware-vmblock-fuse.service
     sudo systemctl enable docker.service
-    sudo systemctl enable qemu-guest-agent
-    sudo systemctl enable spice-vdagentd
 
     cd
 
