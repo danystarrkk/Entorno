@@ -192,42 +192,7 @@ EOF
 
 }
 
-function configurarHibernacion() {
-  echo -e "\n${blueColour}[3] Configurando Swapfile de ${SWAP_SIZE_GB}GB para Hibernación...${endColour}"
-
-  # Crear swapfile
-  sudo swapoff -a
-  sudo dd if=/dev/zero of=$SWAP_PATH bs=1G count=$SWAP_SIZE_GB status=progress
-  sudo chmod 600 $SWAP_PATH
-  sudo mkswap $SWAP_PATH
-  sudo swapon $SWAP_PATH
-
-  # Añadir a fstab
-  if ! grep -q "$SWAP_PATH" /etc/fstab; then
-    echo "$SWAP_PATH none swap defaults 0 0" | sudo tee -a /etc/fstab
-  fi
-
-  # Obtener UUID y Offset
-  UUID=$(findmnt -no UUID -T $SWAP_PATH)
-  OFFSET=$(sudo filefrag -v $SWAP_PATH | awk '{if($1=="0:"){print substr($4, 1, length($4)-2)}}')
-
-  # Configurar GRUB
-  if ! grep -q "resume=" /etc/default/grub; then
-    sudo sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT=\"|GRUB_CMDLINE_LINUX_DEFAULT=\"resume=UUID=$UUID resume_offset=$OFFSET |" /etc/default/grub
-    sudo grub-mkconfig -o /boot/grub/grub.cfg
-  fi
-
-  # Configurar Hooks (Añadir resume después de udev)
-  if ! grep -q "resume" /etc/mkinitcpio.conf; then
-    sudo sed -i 's/HOOKS=(base udev/HOOKS=(base udev resume/' /etc/mkinitcpio.conf
-    sudo mkinitcpio -P
-  fi
-
-  echo -e "${greenColour}[+] Hibernación configurada correctamente${endColour}"
-}
-
 ##### Orden de Ejecución #########
 
 installDependencias
 configuracionEntorno
-configurarHibernacion
