@@ -57,7 +57,7 @@ function installDependencias() {
 
     sudo pacman -Syu
 
-    sudo pacman -S --noconfirm --needed qemu-guest-agent spice-vdagent nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
+    sudo pacman -S --noconfirm --needed nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
 
     echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
 
@@ -123,8 +123,6 @@ function configuracionEntorno() {
     sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
     sudo systemctl enable vmtoolsd.service
     sudo systemctl enable vmware-vmblock-fuse.service
-    sudo systemctl enable qemu-guest-agent
-    sudo systemctl enable spice-vdagentd
     sudo systemctl enable docker.service
 
     cd
