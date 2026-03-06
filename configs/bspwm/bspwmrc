@@ -1,45 +1,58 @@
 #! /bin/sh
 
-pgrep -x sxhkd >/dev/null || sxhkd &
+# ==========================================
+# Configuraci�n del Entorno (bspc)
+# ==========================================
 
 bspc monitor -d 1 2 3 4 5 6 # 7 8 9
 
+# Apariencia
 bspc config border_width 0
 bspc config window_gap 20
-
 bspc config split_ratio 0.5
 bspc config borderless_monocle true
 bspc config gapless_monocle true
 
+# Reglas de ventanas espec�ficas
 bspc rule -a Gimp desktop='^8' state=floating follow=on
 bspc rule -a Chromium desktop='^2'
 bspc rule -a mplayer2 state=floating
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
 
-sxhkd &
+# ==========================================
+# Autoarranque de Aplicaciones (Daemons)
+# ==========================================
 
-# Copy and Paste
-vmware-user-suid-wrapper &
-spice-vdagent &
+# Gestor de atajos de teclado (Solo iniciar si no existe)
+pgrep -x sxhkd >/dev/null || sxhkd &
 
-# Wallpapers
-nitrogen --restore
+# Portapapeles y resoluci�n de la M�quina Virtual (KVM)
+#pgrep -x spice-vdagent >/dev/null || spice-vdagent &
 
-# Polybar
-$HOME/.config/polybar/./launch.sh
+pgrep -x vmware-user-suid-wrapper >/dev/null || vmware-user-suid-wrapper &
 
-#Picom
-picom &
+# Compositor visual (Picom) - Solo iniciar si no existe
+pgrep -x picom >/dev/null || picom &
 
-# screen not error
+# Barra de estado (Aseg�rate de que launch.sh tenga un "killall -q polybar" adentro)
+$HOME/.config/polybar/launch.sh &
+
+# ==========================================
+# Ajustes r�pidos de una sola ejecuci�n
+# ==========================================
+
+# Fondo de pantalla
+nitrogen --restore &
+
+# Compatibilidad para Java (pantallas grises)
 wmname LG3D &
 
-# Mouse error Solution
+# Soluci�n para el cursor (forzar la flecha normal)
 xsetroot -cursor_name left_ptr &
 
-#Keyboar config
+# Configuraci�n de teclado
 setxkbmap -layout us -variant alt-intl
 
-#arandr
+# Resoluci�n de pantalla de la VM
 xrandr --output Virtual-1 --auto
