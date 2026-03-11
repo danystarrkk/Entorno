@@ -57,7 +57,7 @@ function installDependencias() {
 
     sudo pacman -Syu
 
-    sudo pacman -S --noconfirm --needed nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
+    sudo pacman -S --noconfirm --needed nautilus nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs seclists
 
     echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
 
@@ -70,7 +70,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S --noconfirm net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
+    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme openjdk22-src net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -92,7 +92,7 @@ function configuracionEntorno() {
 
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
-  	xdg-user-dirs-update --force
+    xdg-user-dirs-update --force
     wget -P $rutaT wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
     unzip $rutaT/Hack.zip -d $rutaT/fonts
     rm -rf $rutaT/Hack.zip
@@ -169,7 +169,19 @@ Exec=bspwm
 Type=Application
 EOF
 
-    sudo pacman -Syu burpsuite whatweb seclists netcat
+    # Dark theme and icons
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
+    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+
+    mkdir -p ~/.config/gtk-3.0
+
+    tee ~/.config/gtk-3.0/settings.ini >/dev/null <<'EOF'
+[Settings]
+gtk-application-prefer-dark-theme=1
+gtk-theme-name=Arc-Dark
+gtk-icon-theme-name=Papirus-Dark
+EOF
 
     cd
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf

@@ -129,4 +129,8 @@ super + shift + f
 
 # Burpsuite
 super + shift + b
-  /bin/burpsuite
+  /opt/Burpsuite-Professional/burpsuitepro
+
+# Flameshot
+super + shift + s
+  /usr/bin/flameshot gui
