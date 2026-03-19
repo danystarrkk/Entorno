@@ -70,7 +70,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme java-22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
+    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme jdk22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
