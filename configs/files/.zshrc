@@ -1,12 +1,8 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-
+# Enable Powerlevel10k instant prompt.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Created by newuser for 5.9
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
@@ -23,10 +19,14 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt histignorealldups sharehistory
 
-# Use modern completion system
+# Use modern completion system (Optimizado con Caché)
 autoload -Uz compinit
-compinit
- 
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
@@ -41,18 +41,15 @@ zstyle ':completion:*' menu select=long
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*' use-compctl false
 zstyle ':completion:*' verbose true
- 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
-# Custom Aliases
+# Custom Aliases (Rutas absolutas por seguridad)
 # -----------------------------------------------
-# bat
 alias cat='/bin/bat'
-alias catn='/bin/bat--style=plain'
-alias catnp='/bin/bat--style=plain --paging=never'
- 
-# ls
+alias catn='/bin/bat --style=plain'
+alias catnp='/bin/bat --style=plain --paging=never'
+
 alias ll='/bin/lsd -lh --group-dirs=first'
 alias la='/bin/lsd -a --group-dirs=first'
 alias l='/bin/lsd --group-dirs=first'
@@ -64,6 +61,10 @@ export LS_COLORS="rs=0:di=34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;
 
 export PATH=$PATH:/usr/local/go/bin
 
+# -----------------------------------------------
+# Funciones Hacking
+# -----------------------------------------------
+
 function mkhack(){
   mkdir {nmap,content,exploits}
   touch notas
@@ -72,23 +73,21 @@ function mkhack(){
 function extractPorts(){
     ports="$(cat $1 | /bin/grep -oP '\d{1,5}/open' | awk '{print $1}' FS='/' | xargs | tr ' ' ',')"
     ip_address="$(cat $1 | /bin/grep -oP '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}' | sort -u | head -n 1)"
-    echo -e "\n[*] Extracting information...\n" > extractPorts.tmp
-    echo -e "\t[*] IP Address: $ip_address"  >> extractPorts.tmp
-    echo -e "\t[*] Open ports: $ports\n"  >> extractPorts.tmp
+    echo -e "\n[*] Extracting information...\n"
+    echo -e "\t[*] IP Address: $ip_address"
+    echo -e "\t[*] Open ports: $ports\n"
     echo $ports | tr -d '\n' | xclip -sel clip
-    echo -e "[*] Ports copied to clipboard\n"  >> extractPorts.tmp
-    cat extractPorts.tmp; rm extractPorts.tmp
+    echo -e "[*] Ports copied to clipboard\n"
 }
 
 function settarget(){
     ip_address=$1
     machine_name=$2
-    echo "$ip_address $machine_name" > /home/stark/.config/bin/target
+    echo "$ip_address $machine_name" > "$HOME/.config/bin/target"
 }
 
-
 function cleartarget(){
-    echo "" > /home/stark/.config/bin/target
+    echo "" > "$HOME/.config/bin/target"
 }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
