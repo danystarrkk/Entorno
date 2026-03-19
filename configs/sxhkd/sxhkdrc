@@ -4,31 +4,31 @@
 
 # terminal emulator
 super + Return
-  /usr/bin/kitty
+	kitty
 
 # program launcher
 super + d
-  /usr/bin/rofi -show drun
+	rofi -show drun
 
 super + r
-  $HOME/.config/rofi/bin/runner
+	$HOME/.config/rofi/bin/runner
 
 super + p
-  $HOME/.config/rofi/bin/powermenu
+	$HOME/.config/rofi/bin/powermenu
 
 # make sxhkd reload its configuration files:
 super + Escape
-  pkill -USR1 -x sxhkd
+	pkill -USR1 -x sxhkd
 
 #
 # bspwm hotkeys
 #
 
-# quit/restart bspwm
-super + shift + {q,r}
+# quit/restart bspwm (CORREGIDO: Ahora usa ALT para evitar cerrar sesión por accidente)
+super + alt + {q,r}
 	bspc {quit,wm -r}
 
-# close and kill
+# close and kill (Cerrar ventana suave / Matar ventana a la fuerza)
 super + {_,shift + }q
 	bspc node -{c,k}
 
@@ -48,13 +48,9 @@ super + g
 # state/flags
 #
 
-# set the window state
+# set the window state (t = tiled, s = floating, f = fullscreen)
 super + {t,shift + t,s,f}
 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
-
-# set the node flags
-#super + ctrl + {m,x,y,z}
-#	bspc node -g {marked,locked,sticky,private}
 
 #
 # focus/swap
@@ -79,12 +75,6 @@ super + bracket{left,right}
 # focus the last node/desktop
 super + {grave,Tab}
 	bspc {node,desktop} -f last
-
-# focus the older or newer node in the focus history
-super + {o,i}
-	bspc wm -h off; \
-	bspc node {older,newer} -f; \
-	bspc wm -h on
 
 # focus or send to the given desktop
 super + {_,shift + }{1-9,0}
@@ -122,15 +112,18 @@ super + shift + ctrl + {h,j,k,l}
 super + alt + {h,j,k,l}
 	$HOME/.config/bspwm/scripts/bspwm_resize {west,south,north,east}
 
+# ==========================================
+# Herramientas de Ciberseguridad y Utilidades
+# ==========================================
 
 # Firefox
 super + shift + f
-  /bin/firefox
+	firefox
 
 # Burpsuite
 super + shift + b
-  /opt/Burpsuite-Professional/burpsuitepro
+	/opt/Burpsuite-Professional/burpsuitepro
 
-# Flameshot
+# Flameshot (Capturas de pantalla)
 super + shift + s
-  /usr/bin/flameshot gui
+	flameshot gui
