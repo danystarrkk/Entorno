@@ -6,10 +6,10 @@ if [ -d "/sys/class/net/tun0" ]; then
     IP=$(ip -4 -br addr show tun0 2>/dev/null | awk '{print $3}' | cut -d/ -f1)
     
     if [ -n "$IP" ]; then
-        echo "%{F#1bbf3e}󰅣  %{F#ffffff}%{T6}$IP%{u-}%{T-}"
+        echo "%{F#1bbf3e}󰅣  %{F#ffffff}$IP"
     else
-        echo "%{F#1bbf3e}󰅤 %{u-} %{F#ffffff}%{T6}Error%{T-}"
+        echo "%{F#1bbf3e}󰅤  %{F#ffffff}Error"
     fi
 else
-    echo "%{F#1bbf3e}󰅤 %{u-} %{F#ffffff}%{T6}Disconnected%{T-}"
+    echo "%{F#1bbf3e}󰅤  %{F#ffffff}Disconnected"
 fi
