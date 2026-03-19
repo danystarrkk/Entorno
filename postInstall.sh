@@ -70,7 +70,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme openjdk22-src net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
+    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme java-22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -93,9 +93,15 @@ function configuracionEntorno() {
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
     xdg-user-dirs-update --force
-    wget -P $rutaT wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
-    unzip $rutaT/Hack.zip -d $rutaT/fonts
+    wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip    
+    mkdir -p $rutaT/fonts/HackNerdFonts
+    unzip $rutaT/Hack.zip -d $rutaT/fonts/HackNerdFonts
     rm -rf $rutaT/Hack.zip
+
+    wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
+    mkdir -p $rutaT/fonts/JetBrainsMono
+    unzip -o $rutaT/JetBrainsMono.zip -d $rutaT/fonts/JetBrainsMono
+    rm -rf $rutaT/JetBrainsMono.zip
 
     mkdir $rutaP/.config/bin
     touch $rutaP/.config/bin/target
@@ -114,7 +120,8 @@ function configuracionEntorno() {
     cp -r $rutaT/kitty $rutaP/.config
     sudo cp -r $rutaT/kitty /root/.config
 
-    sudo cp $rutaT/fonts/* /usr/share/fonts
+    sudo cp -r $rutaT/fonts/* /usr/share/fonts
+    sudo fc-cache -fv
 
     cp -r $rutaT/picom $rutaP/.config
 
@@ -185,11 +192,37 @@ EOF
 
     cd
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install
+    ~/.fzf/install --all
 
-    sudo cd
-    sudo git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    sudo ~/.fzf/install
+    sudo git clone --depth 1 https://github.com/junegunn/fzf.git /root/.fzf
+    sudo /root/.fzf/install --all
+
+    echo -e "${blueColour}[+] Aplicando variables globales para Tema Oscuro...${endColour}"
+
+# 1. Forzar a las aplicaciones Qt a usar el motor de GTK3 y tu tema
+    sudo tee -a /etc/environment >/dev/null <<'EOF'
+QT_QPA_PLATFORMTHEME=gtk3
+QT_STYLE_OVERRIDE=kvantum
+GTK_THEME=Arc-Dark
+EOF
+
+# 2. Asegurar que las aplicaciones GTK4 (si instalas alguna) también sean oscuras
+    mkdir -p ~/.config/gtk-4.0
+    tee ~/.config/gtk-4.0/settings.ini >/dev/null <<'EOF'
+[Settings]
+gtk-application-prefer-dark-theme=1
+gtk-theme-name=Arc-Dark
+gtk-icon-theme-name=Papirus-Dark
+EOF
+
+# 3. Configurar el tema oscuro para el usuario root (vital cuando abres herramientas con sudo)
+    sudo mkdir -p /root/.config/gtk-3.0
+    sudo tee /root/.config/gtk-3.0/settings.ini >/dev/null <<'EOF'
+[Settings]
+gtk-application-prefer-dark-theme=1
+gtk-theme-name=Arc-Dark
+gtk-icon-theme-name=Papirus-Dark
+EOF
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
@@ -203,6 +236,12 @@ EOF
 }
 
 ##### Orden de Ejecución #########
+
+echo -e "${blueColour}[*] Introduce tu contraseña de sudo (solo te la pediremos esta vez):${endColour}"
+sudo -v
+
+# Bucle en segundo plano que mantiene sudo activo mientras el script esté corriendo
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 installDependencias
 configuracionEntorno
