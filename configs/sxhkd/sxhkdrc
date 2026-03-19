@@ -29,7 +29,7 @@ super + alt + {q,r}
 	bspc {quit,wm -r}
 
 # close and kill (Cerrar ventana suave / Matar ventana a la fuerza)
-super + {_,shift + }q
+super + q
 	bspc node -{c,k}
 
 # alternate between the tiled and monocle layout
