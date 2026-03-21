@@ -1,5 +1,8 @@
 #! /bin/sh
 
+PANTALLA=$(xrandr | grep " connected" | awk '{print $1}')
+xrandr --output $PANTALLA --auto &
+
 # ==========================================
 # Configuraci�n del Entorno (bspc)
 # ==========================================
