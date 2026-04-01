@@ -40,7 +40,7 @@ $HOME/.config/polybar/launch.sh &
 # ==========================================
 
 # Fondo de pantalla
-nitrogen --restore &
+feh --bg-fill ~/Imágenes/wallpapers/02. Solarized Dark.png &
 
 # Compatibilidad para Java (pantallas grises)
 wmname LG3D &
