@@ -44,33 +44,11 @@ function installDependencias() {
   if [ $opt1 == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
-    sudo pacman -Syu
+    sudo apt update -y && sudo apt upgrade -y
 
-    sudo pacman -S --needed --noconfirm base-devel git
+    sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
 
-    echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
-
-    curl -O https://blackarch.org/strap.sh
-    chmod +x strap.sh
-    sudo ./strap.sh
-    rm -f strap.sh
-
-    sudo pacman -Syu
-
-    sudo pacman -S --noconfirm --needed nautilus nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs seclists
-
-    echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
-
-    echo -e "${blueColour}[+] Instalando yay ${endColour}\n"
-
-    git clone https://aur.archlinux.org/yay.git
-
-    mv yay configs
-    cd $rutaT/yay
-    makepkg -si
-    cd $rutaE
-
-    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme jdk22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm wget curl arandr nitrogen firefox less tree ripgrep
+    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr nitrogen ripgrep qemu-guest-agent spice-vdagent
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -92,8 +70,7 @@ function configuracionEntorno() {
 
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
-    xdg-user-dirs-update --force
-    wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip    
+    wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
     mkdir -p $rutaT/fonts/HackNerdFonts
     unzip $rutaT/Hack.zip -d $rutaT/fonts/HackNerdFonts
     rm -rf $rutaT/Hack.zip
@@ -128,8 +105,8 @@ function configuracionEntorno() {
     sudo mkdir /usr/share/zsh-sudo/
 
     sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
-    sudo systemctl enable vmtoolsd.service
-    sudo systemctl enable vmware-vmblock-fuse.service
+    sudo systemctl enable qemu-guest-agent.service
+    sudo systemctl enable spice-vdagentd.service
     sudo systemctl enable docker.service
 
     cd
@@ -162,20 +139,6 @@ function configuracionEntorno() {
     cp -r $rutaT/polybar $HOME/.config
     cp -r $rutaT/rofi $rutaP/.config
 
-    echo -e "${blueColour}[+] Instalando SDDM mínimo...${endColour}"
-
-    # Habilitar el servicio de SDDM
-    sudo systemctl enable sddm.service
-
-    # Crear archivo de sesión para bspwm
-    sudo tee /usr/share/xsessions/bspwm.desktop >/dev/null <<'EOF'
-[Desktop Entry]
-Name=bspwm
-Comment=Binary space partitioning window manager
-Exec=bspwm
-Type=Application
-EOF
-
     # Dark theme and icons
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
     gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
@@ -199,14 +162,13 @@ EOF
 
     echo -e "${blueColour}[+] Aplicando variables globales para Tema Oscuro...${endColour}"
 
-# 1. Forzar a las aplicaciones Qt a usar el motor de GTK3 y tu tema
+    # 1. Forzar a las aplicaciones Qt a usar el motor de GTK3 y tu tema
     sudo tee -a /etc/environment >/dev/null <<'EOF'
 QT_QPA_PLATFORMTHEME=gtk3
-QT_STYLE_OVERRIDE=kvantum
 GTK_THEME=Arc-Dark
 EOF
 
-# 2. Asegurar que las aplicaciones GTK4 (si instalas alguna) también sean oscuras
+    # 2. Asegurar que las aplicaciones GTK4 (si instalas alguna) también sean oscuras
     mkdir -p ~/.config/gtk-4.0
     tee ~/.config/gtk-4.0/settings.ini >/dev/null <<'EOF'
 [Settings]
@@ -215,7 +177,7 @@ gtk-theme-name=Arc-Dark
 gtk-icon-theme-name=Papirus-Dark
 EOF
 
-# 3. Configurar el tema oscuro para el usuario root (vital cuando abres herramientas con sudo)
+    # 3. Configurar el tema oscuro para el usuario root (vital cuando abres herramientas con sudo)
     sudo mkdir -p /root/.config/gtk-3.0
     sudo tee /root/.config/gtk-3.0/settings.ini >/dev/null <<'EOF'
 [Settings]
@@ -241,7 +203,11 @@ echo -e "${blueColour}[*] Introduce tu contraseña de sudo (solo te la pediremos
 sudo -v
 
 # Bucle en segundo plano que mantiene sudo activo mientras el script esté corriendo
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+while true; do
+  sudo -n true
+  sleep 60
+  kill -0 "$$" || exit
+done 2>/dev/null &
 
 installDependencias
 configuracionEntorno

@@ -25,9 +25,9 @@ bspc rule -a Screenkey manage=off
 pgrep -x sxhkd >/dev/null || sxhkd &
 
 # Portapapeles y resoluci�n de la M�quina Virtual (KVM)
-#pgrep -x spice-vdagent >/dev/null || spice-vdagent &
+#pgrep -x vmware-user-suid-wrapper >/dev/null || vmware-user-suid-wrapper &
 
-pgrep -x vmware-user-suid-wrapper >/dev/null || vmware-user-suid-wrapper &
+pgrep -x spice-vdagent >/dev/null || spice-vdagent &
 
 # Compositor visual (Picom) - Solo iniciar si no existe
 pgrep -x picom >/dev/null || picom &
