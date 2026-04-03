@@ -24,9 +24,9 @@ bspc rule -a Screenkey manage=off
 # Gestor de atajos de teclado (Solo iniciar si no existe)
 pgrep -x sxhkd >/dev/null || sxhkd &
 
-# Portapapeles y resoluci�n de la M�quina Virtual (KVM)
-killall -q spice-vdagent
-spice-vdagent &
+# Portapapeles y resolución de la Máquina Virtual (VMware)
+killall -q vmtoolsd
+vmware-user-suid-wrapper &
 
 # Compositor visual (Picom) - Solo iniciar si no existe
 pgrep -x picom >/dev/null || picom &
