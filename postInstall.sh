@@ -48,7 +48,7 @@ function installDependencias() {
 
     sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
 
-    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr ripgrep qemu-guest-agent spice-vdagent
+    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr ripgrep open-vm-tools open-vm-tools-desktop
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -105,8 +105,7 @@ function configuracionEntorno() {
     sudo mkdir /usr/share/zsh-sudo/
 
     sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
-    sudo systemctl enable qemu-guest-agent.service
-    sudo systemctl enable spice-vdagentd.service
+    sudo systemctl enable open-vm-tools.service
     sudo systemctl enable docker.service
 
     cd
