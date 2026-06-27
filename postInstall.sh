@@ -44,11 +44,33 @@ function installDependencias() {
   if [ $opt1 == "y" ]; then
     echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
 
-    sudo apt update -y && sudo apt upgrade -y
+    sudo pacman -Syu
 
-    sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
+    sudo pacman -S --needed --noconfirm base-devel git
 
-    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr ripgrep open-vm-tools open-vm-tools-desktop
+    echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
+
+    curl -O https://blackarch.org/strap.sh
+    chmod +x strap.sh
+    sudo ./strap.sh
+    rm -f strap.sh
+
+    sudo pacman -Syu
+
+    sudo pacman -S --noconfirm --needed nautilus nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs seclists
+
+    echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
+
+    echo -e "${blueColour}[+] Instalando yay ${endColour}\n"
+
+    git clone https://aur.archlinux.org/yay.git
+
+    mv yay configs
+    cd $rutaT/yay
+    makepkg -si
+    cd $rutaE
+
+    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme jdk22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip wget curl arandr nitrogen firefox less tree ripgrep
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -70,6 +92,7 @@ function configuracionEntorno() {
 
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
+    xdg-user-dirs-update --force
     wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
     mkdir -p $rutaT/fonts/HackNerdFonts
     unzip $rutaT/Hack.zip -d $rutaT/fonts/HackNerdFonts
@@ -91,7 +114,7 @@ function configuracionEntorno() {
 
     chmod +x $HOME/.config/bspwm/scripts/*
 
-    cp -r $rutaT/wallpapers $rutaP/Imágenes
+    cp -r $rutaT/wallpapers $rutaP/Pictures
     cp -r $rutaT/nvim $rutaP/.config
 
     cp -r $rutaT/kitty $rutaP/.config
@@ -105,7 +128,8 @@ function configuracionEntorno() {
     sudo mkdir /usr/share/zsh-sudo/
 
     sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
-    sudo systemctl enable open-vm-tools.service
+    sudo systemctl enable vmtoolsd.service
+    sudo systemctl enable vmware-vmblock-fuse.service
     sudo systemctl enable docker.service
 
     cd
@@ -164,6 +188,7 @@ EOF
     # 1. Forzar a las aplicaciones Qt a usar el motor de GTK3 y tu tema
     sudo tee -a /etc/environment >/dev/null <<'EOF'
 QT_QPA_PLATFORMTHEME=gtk3
+QT_STYLE_OVERRIDE=kvantum
 GTK_THEME=Arc-Dark
 EOF
 

@@ -24,9 +24,10 @@ bspc rule -a Screenkey manage=off
 # Gestor de atajos de teclado (Solo iniciar si no existe)
 pgrep -x sxhkd >/dev/null || sxhkd &
 
-# Portapapeles y resolución de la Máquina Virtual (VMware)
-killall -q vmtoolsd
-vmware-user-suid-wrapper &
+# Portapapeles y resoluci�n de la M�quina Virtual (KVM)
+#pgrep -x spice-vdagent >/dev/null || spice-vdagent &
+
+pgrep -x vmware-user-suid-wrapper >/dev/null || vmware-user-suid-wrapper &
 
 # Compositor visual (Picom) - Solo iniciar si no existe
 pgrep -x picom >/dev/null || picom &
@@ -39,7 +40,7 @@ $HOME/.config/polybar/launch.sh &
 # ==========================================
 
 # Fondo de pantalla
-feh --bg-fill ~/Imágenes/wallpapers/02.\ Solarized\ Dark.png &
+nitrogen --restore &
 
 # Compatibilidad para Java (pantallas grises)
 wmname LG3D &
