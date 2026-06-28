@@ -97,9 +97,6 @@ export XDG_RUNTIME_DIR=/run/user/1000
 export QT_QPA_PLATFORM=wayland
 export GDK_BACKEND=wayland
 
-# Fix automático para aplicaciones Java/X11 rebeldes
-alias burpsuite="env GDK_BACKEND=x11 _JAVA_AWT_WM_NONREPARENTING=1 burpsuite"
-
 # Envoltorio genérico para forzar XWayland en apps problemáticas
 alias xrun="env GDK_BACKEND=x11 _JAVA_AWT_WM_NONREPARENTING=1"
 # sudo xrun <binario> en caso de necesitar sudo
