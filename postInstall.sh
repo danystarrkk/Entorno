@@ -57,7 +57,7 @@ function installDependencias() {
 
     sudo pacman -Syu
 
-    sudo pacman -S --noconfirm --needed nautilus nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs seclists
+    sudo pacman -S --noconfirm --needed nautilus nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs seclists openjdk21-src wl-clipboard
 
     echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
 
@@ -70,7 +70,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme jdk22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh kitty zsh-syntax-highlighting bat lsd npm wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip wget curl arandr nitrogen firefox less tree ripgrep
+    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme net-tools pocl xclip xsel neovim xorg-xsetroot git vim zsh kitty zsh-syntax-highlighting bat lsd npm wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip wget curl arandr firefox less tree ripgrep
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -147,6 +147,8 @@ function configuracionEntorno() {
     sudo cp -r $rutaT/nvim /root/.config/
 
     sudo ln -s -f $rutaP/.zshrc /root/.zshrc
+    sudo mv /usr/lib/xdg-desktop-portal /usr/lib/xdg-desktop-portal-disabled
+    sudo archlinux-java set java-21-openjdk
 
     # Dark theme and icons
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
