@@ -103,6 +103,16 @@ alias xrun="env GDK_BACKEND=x11 _JAVA_AWT_WM_NONREPARENTING=1"
 # Permitir que los alias funcionen incluso usando sudo
 alias sudo="sudo "
 
+function sinDB() {
+    if [ "$#" -eq 0 ]; then
+        echo "[!] Uso: sinDB <binario> [argumentos...]"
+        return 1
+    fi
+    
+    echo "[+] Ejecutando '$@' en un bus privado (aislado del host)..."
+    dbus-run-session "$@"
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
