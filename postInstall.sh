@@ -196,6 +196,8 @@ gtk-theme-name=Arc-Dark
 gtk-icon-theme-name=Papirus-Dark
 EOF
 
+    sudo chown stark:stark /home/stark -R
+
     if [ $(echo $?) -eq 0 ]; then
       echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
     else
