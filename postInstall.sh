@@ -70,7 +70,7 @@ function installDependencias() {
     makepkg -si
     cd $rutaE
 
-    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme jdk22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip wget curl arandr nitrogen firefox less tree ripgrep
+    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme jdk22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot git vim zsh kitty zsh-syntax-highlighting bat lsd npm wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip wget curl arandr nitrogen firefox less tree ripgrep
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
@@ -106,15 +106,9 @@ function configuracionEntorno() {
     mkdir $rutaP/.config/bin
     touch $rutaP/.config/bin/target
 
-    cp -r $rutaT/bspwm $rutaP/.config
-    cp -r $rutaT/sxhkd $rutaP/.config
-
     chsh -s /bin/zsh
     sudo chsh -s /bin/zsh
 
-    chmod +x $HOME/.config/bspwm/scripts/*
-
-    cp -r $rutaT/wallpapers $rutaP/Pictures
     cp -r $rutaT/nvim $rutaP/.config
 
     cp -r $rutaT/kitty $rutaP/.config
@@ -123,13 +117,9 @@ function configuracionEntorno() {
     sudo cp -r $rutaT/fonts/* /usr/share/fonts
     sudo fc-cache -fv
 
-    cp -r $rutaT/picom $rutaP/.config
-
     sudo mkdir /usr/share/zsh-sudo/
 
     sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
-    sudo systemctl enable vmtoolsd.service
-    sudo systemctl enable vmware-vmblock-fuse.service
     sudo systemctl enable docker.service
 
     cd
@@ -157,10 +147,6 @@ function configuracionEntorno() {
     sudo cp -r $rutaT/nvim /root/.config/
 
     sudo ln -s -f $rutaP/.zshrc /root/.zshrc
-
-    rm -rf ~/.config/polybar/
-    cp -r $rutaT/polybar $HOME/.config
-    cp -r $rutaT/rofi $rutaP/.config
 
     # Dark theme and icons
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
