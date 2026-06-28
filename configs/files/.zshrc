@@ -90,6 +90,22 @@ function cleartarget(){
     echo "" > "$HOME/.config/bin/target"
 }
 
+# --- Puente Gráfico hacia CachyOS (Niri) ---> verificar el valor de display
+export DISPLAY=:1
+export WAYLAND_DISPLAY=wayland-1
+export XDG_RUNTIME_DIR=/run/user/1000
+export QT_QPA_PLATFORM=wayland
+export GDK_BACKEND=wayland
+
+# Fix automático para aplicaciones Java/X11 rebeldes
+alias burpsuite="env GDK_BACKEND=x11 _JAVA_AWT_WM_NONREPARENTING=1 burpsuite"
+
+# Envoltorio genérico para forzar XWayland en apps problemáticas
+alias xrun="env GDK_BACKEND=x11 _JAVA_AWT_WM_NONREPARENTING=1"
+# sudo xrun <binario> en caso de necesitar sudo
+# Permitir que los alias funcionen incluso usando sudo
+alias sudo="sudo "
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
