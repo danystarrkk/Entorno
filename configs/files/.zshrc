@@ -91,17 +91,14 @@ function cleartarget(){
 }
 
 # --- Puente Gráfico hacia CachyOS (Niri) ---> verificar el valor de display
-export DISPLAY=:1
-export WAYLAND_DISPLAY=wayland-1
+export DISPLAY=:0
+export WAYLAND_DISPLAY=wayland-0
 export XDG_RUNTIME_DIR=/run/user/1000
 export QT_QPA_PLATFORM=wayland
 export GDK_BACKEND=wayland
 
 # Envoltorio genérico para forzar XWayland en apps problemáticas
 alias xrun="env GDK_BACKEND=x11 _JAVA_AWT_WM_NONREPARENTING=1"
-# sudo xrun <binario> en caso de necesitar sudo
-# Permitir que los alias funcionen incluso usando sudo
-alias sudo="sudo "
 
 function sinDB() {
     if [ "$#" -eq 0 ]; then
