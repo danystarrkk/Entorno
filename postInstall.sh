@@ -109,8 +109,6 @@ function configuracionEntorno() {
     chsh -s /bin/zsh
     sudo chsh -s /bin/zsh
 
-    cp -r $rutaT/nvim $rutaP/.config
-
     cp -r $rutaT/kitty $rutaP/.config
     sudo cp -r $rutaT/kitty /root/.config
 
@@ -144,8 +142,6 @@ function configuracionEntorno() {
     sudo cp $rutaT/files_root/.p10k.zsh /root
 
     sudo cp -r $rutaT/kitty /root/.config/
-    sudo cp -r $rutaT/nvim /root/.config/
-
     sudo ln -s -f $rutaP/.zshrc /root/.zshrc
     sudo mv /usr/lib/xdg-desktop-portal /usr/lib/xdg-desktop-portal-disabled
     sudo archlinux-java set java-21-openjdk
@@ -199,6 +195,9 @@ gtk-icon-theme-name=Papirus-Dark
 EOF
 
     sudo chown stark:stark /home/stark -R
+    git clone https/github.com/danystarrkk/nvim /home/stark/.config
+    sudo git clone https/github.com/danystarrkk/nvim /root/.config
+    bash /home/stark/.config/nvim/script/base.sh
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
