@@ -195,8 +195,9 @@ gtk-icon-theme-name=Papirus-Dark
 EOF
 
     sudo chown stark:stark /home/stark -R
-    git clone https://github.com/danystarrkk/nvim /home/stark/.config
-    sudo git clone https://github.com/danystarrkk/nvim /root/.config
+
+    git clone https://github.com/danystarrkk/nvim /home/stark/.config/nvim
+    sudo git clone https://github.com/danystarrkk/nvim /root/.config/nvim
     bash /home/stark/.config/nvim/script/base.sh
 
     if [ $(echo $?) -eq 0 ]; then
