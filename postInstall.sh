@@ -50,8 +50,7 @@ function installDependencias() {
     # Fuentes
     sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
 
-    # Paquetería principal (Sin utilidades de VM ni WM)
-    sudo apt install -y dconf-cli libglib2.0-bin papirus-icon-theme pocl-opencl-icd xclip xsel neovim zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev ripgrep unzip wget git curl
+    sudo apt install -y dconf-cli libglib2.0-bin papirus-icon-theme pocl-opencl-icd xclip xsel neovim zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev ripgrep unzip wget git curl xdg-user-dirs
 
     if [ $? -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependencias correctamente.....${endColour}"
@@ -88,10 +87,14 @@ function configuracionEntorno() {
     sudo cp -r $rutaT/fonts/* /usr/share/fonts
     sudo fc-cache -fv &>/dev/null
 
-    # 2. Configuración de utilidades base (.config)
-    echo -e "${purpleColour}    [+] Estructurando directorios de configuración...${endColour}"
+    # 2. Configuración de utilidades base (.config) y XDG Dirs
+    echo -e "${purpleColour}    [+] Estructurando directorios de configuración y usuario...${endColour}"
     mkdir -p $rutaP/.config
     sudo mkdir -p /root/.config
+
+    # AÑADIDO: Forzar la creación de las carpetas XDG para el usuario actual y root
+    xdg-user-dirs-update
+    sudo xdg-user-dirs-update
 
     cp -r $rutaT/kitty $rutaP/.config/
     sudo cp -r $rutaT/kitty /root/.config/
