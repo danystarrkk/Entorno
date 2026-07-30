@@ -16,7 +16,8 @@ grayColour="\e[0;37m\033[1m"
 ########## Salir ########
 
 function ctrl_c() {
-  echo -e ""
+  echo -e "\n${redColour}[!] Saliendo...${endColour}\n"
+  exit 1
 }
 
 trap ctrl_c SIGINT
@@ -37,49 +38,27 @@ function installDependencias() {
 
   clear
 
-  echo -e "\n\t ${blueColour} Instalación del Entorno \n\n${endColour}"
+  echo -e "\n\t ${blueColour} Instalación del Entorno (Optimizada para Docker) \n\n${endColour}"
 
   echo -en "${turquoiseColour}[1] Instalar dependencias [y/n]: ${endColour}" && read opt1
 
-  if [ $opt1 == "y" ]; then
-    echo -e "\n${purpleColour}    [+] Instalando Dependencias......${endColour}"
+  if [ "$opt1" == "y" ]; then
+    echo -e "\n${purpleColour}    [+] Instalando Dependencias Base......${endColour}"
 
-    sudo pacman -Syu
+    sudo apt update -y && sudo apt upgrade -y
 
-    sudo pacman -S --needed --noconfirm base-devel git
+    sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
 
-    echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
+    sudo apt install -y dconf-cli libglib2.0-bin papirus-icon-theme pocl-opencl-icd xclip xsel neovim zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev ripgrep unzip wget git curl
 
-    curl -O https://blackarch.org/strap.sh
-    chmod +x strap.sh
-    sudo ./strap.sh
-    rm -f strap.sh
-
-    sudo pacman -Syu
-
-    sudo pacman -S --noconfirm --needed nautilus nmap whatweb arp-scan gobuster ffuf wfuzz burpsuite curl wget netcat openssh python ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs seclists openjdk21-src wl-clipboard thunar aircrack-ng hydra john sqlmap nikto dirb wireshark-cli tcpdump ettercap macchanger reaver bully pixiewps crunch hashcat fcrackzip binwalk foremost sleuthkit volatility recon-ng theharvester dnsrecon dnsenum fierce wafw00f cewl medusa ncrack patator ophcrack samdump2 chntpw metasploit exploitdb wpscan commix xsstrike bettercap dsniff dmitry spiderfoot sherlock holehe exiftool radare2 proxychains-ng tor sshuttle mdk4 wifite kismet cowpatty hcxdumptool hcxtools hashcat-utils maskprocessor princeprocessor outguess pdf-parser python-oletools strace ltrace binutils net-tools wireshark-qt
-
-    echo -e "${greenColour}[+] Repositorio BlackArch instalado correctamente${endColour}"
-
-    echo -e "${blueColour}[+] Instalando yay ${endColour}\n"
-
-    git clone https://aur.archlinux.org/yay.git
-
-    mv yay configs
-    cd $rutaT/yay
-    makepkg -si
-    cd $rutaE
-
-    yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme net-tools pocl xclip xsel neovim xorg-xsetroot git vim zsh kitty zsh-syntax-highlighting bat lsd npm wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip wget curl arandr firefox less tree ripgrep
-
-    if [ $(echo $?) -eq 0 ]; then
-      echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
+    if [ $? -eq 0 ]; then
+      echo -e "${greenColour}    [+] Instalación de dependencias correctamente.....${endColour}"
     else
       echo -e "${redColour}    [!] Error en la Instalación de Dependencias....${endColour}"
     fi
 
   else
-    echo -e "\n\t${redColour}[!] No se instalaran las dependecias, no se recomienda omitir este paso...  ${endColour}"
+    echo -e "\n\t${redColour}[!] No se instalarán las dependencias, no se recomienda omitir este paso...  ${endColour}"
   fi
 
 }
@@ -88,140 +67,97 @@ function configuracionEntorno() {
 
   echo -en "\n${blueColour}[2] Desea configurar el Entorno [y/n]:${endColour}" && read opt1
 
-  if [ $opt1 == "y" ]; then
+  if [ "$opt1" == "y" ]; then
 
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
-    xdg-user-dirs-update --force
-    wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+    # 1. Fuentes Nerd Fonts
+    echo -e "${purpleColour}    [+] Descargando e instalando fuentes...${endColour}"
+    wget -q -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
     mkdir -p $rutaT/fonts/HackNerdFonts
-    unzip $rutaT/Hack.zip -d $rutaT/fonts/HackNerdFonts
+    unzip -q $rutaT/Hack.zip -d $rutaT/fonts/HackNerdFonts
     rm -rf $rutaT/Hack.zip
 
-    wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
+    wget -q -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
     mkdir -p $rutaT/fonts/JetBrainsMono
-    unzip -o $rutaT/JetBrainsMono.zip -d $rutaT/fonts/JetBrainsMono
+    unzip -q -o $rutaT/JetBrainsMono.zip -d $rutaT/fonts/JetBrainsMono
     rm -rf $rutaT/JetBrainsMono.zip
 
-    mkdir $rutaP/.config/bin
-    touch $rutaP/.config/bin/target
-
-    chsh -s /bin/zsh
-    sudo chsh -s /bin/zsh
+    sudo cp -r $rutaT/fonts/* /usr/share/fonts
+    sudo fc-cache -fv &>/dev/null
 
     cp -r $rutaT/kitty $rutaP/.config
     sudo cp -r $rutaT/kitty /root/.config
 
-    sudo cp -r $rutaT/fonts/* /usr/share/fonts
-    sudo fc-cache -fv
-
-    sudo mkdir /usr/share/zsh-sudo/
-
-    sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
-    sudo systemctl enable docker.service
-
-    cd
+    echo -e "${purpleColour}    [+] Configurando Zsh y P10k...${endColour}"
+    sudo mkdir -p /usr/share/zsh-sudo/
+    sudo wget -q -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh
 
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k &>/dev/null
+    sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k &>/dev/null
 
-    rm -rf $rutaP/.p10k.zsh
-    rm -rf $rutaP/.zshrc
+    rm -rf $rutaP/.p10k.zsh $rutaP/.zshrc
+    sudo rm -rf /root/.p10k.zsh /root/.zshrc
 
     cp $rutaT/files/.zshrc $HOME
     cp $rutaT/files/.p10k.zsh $HOME
-    cp $rutaT/files/.gitconfig $HOME
-
-    sudo touch /root/.zshrc
-
-    sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k &>/dev/null
-
-    sudo rm -rf /root/.p10k.zsh
-    sudo rm -rf /root/.zshrc
 
     sudo cp $rutaT/files_root/.zshrc /root
     sudo cp $rutaT/files_root/.p10k.zsh /root
-
-    sudo cp -r $rutaT/kitty /root/.config/
     sudo ln -s -f $rutaP/.zshrc /root/.zshrc
-    sudo mv /usr/lib/xdg-desktop-portal /usr/lib/xdg-desktop-portal-disabled
-    sudo archlinux-java set java-21-openjdk
 
-    # Dark theme and icons
-    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-    gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
-    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+    echo -e "${purpleColour}    [+] Instalando FZF...${endColour}"
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf &>/dev/null
+    ~/.fzf/install --all &>/dev/null
 
-    mkdir -p ~/.config/gtk-3.0
+    sudo git clone --depth 1 https://github.com/junegunn/fzf.git /root/.fzf &>/dev/null
+    sudo /root/.fzf/install --all &>/dev/null
 
-    tee ~/.config/gtk-3.0/settings.ini >/dev/null <<'EOF'
+    echo -e "${blueColour}[+] Instalando y aplicando tema Orchis-Dark-Compact...${endColour}"
+    git clone https://github.com/vinceliuice/Orchis-theme.git /tmp/Orchis-theme &>/dev/null
+    /tmp/Orchis-theme/install.sh -t all -c compact -s standard --tweaks solid &>/dev/null
+    rm -rf /tmp/Orchis-theme
+
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' &>/dev/null
+    gsettings set org.gnome.desktop.interface gtk-theme 'Orchis-Dark-Compact' &>/dev/null
+    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' &>/dev/null
+
+    mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0
+    sudo mkdir -p /root/.config/gtk-3.0 /root/.config/gtk-4.0
+
+    tee ~/.config/gtk-3.0/settings.ini ~/.config/gtk-4.0/settings.ini >/dev/null <<'EOF'
 [Settings]
 gtk-application-prefer-dark-theme=1
-gtk-theme-name=Arc-Dark
+gtk-theme-name=Orchis-Dark-Compact
 gtk-icon-theme-name=Papirus-Dark
 EOF
 
-    cd
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install --all
+    sudo tee /root/.config/gtk-3.0/settings.ini /root/.config/gtk-4.0/settings.ini >/dev/null <<'EOF'
+[Settings]
+gtk-application-prefer-dark-theme=1
+gtk-theme-name=Orchis-Dark-Compact
+gtk-icon-theme-name=Papirus-Dark
+EOF
 
-    sudo git clone --depth 1 https://github.com/junegunn/fzf.git /root/.fzf
-    sudo /root/.fzf/install --all
-
-    echo -e "${blueColour}[+] Aplicando variables globales para Tema Oscuro...${endColour}"
-
-    # 1. Forzar a las aplicaciones Qt a usar el motor de GTK3 y tu tema
+    # 7. Variables de entorno globales para GTK/QT
     sudo tee -a /etc/environment >/dev/null <<'EOF'
 QT_QPA_PLATFORMTHEME=gtk3
-QT_STYLE_OVERRIDE=kvantum
-GTK_THEME=Arc-Dark
+GTK_THEME=Orchis-Dark-Compact
 EOF
 
-    # 2. Asegurar que las aplicaciones GTK4 (si instalas alguna) también sean oscuras
-    mkdir -p ~/.config/gtk-4.0
-    tee ~/.config/gtk-4.0/settings.ini >/dev/null <<'EOF'
-[Settings]
-gtk-application-prefer-dark-theme=1
-gtk-theme-name=Arc-Dark
-gtk-icon-theme-name=Papirus-Dark
-EOF
-
-    # 3. Configurar el tema oscuro para el usuario root (vital cuando abres herramientas con sudo)
-    sudo mkdir -p /root/.config/gtk-3.0
-    sudo tee /root/.config/gtk-3.0/settings.ini >/dev/null <<'EOF'
-[Settings]
-gtk-application-prefer-dark-theme=1
-gtk-theme-name=Arc-Dark
-gtk-icon-theme-name=Papirus-Dark
-EOF
-
-    sudo chown stark:stark /home/stark -R
-
-    git clone https://github.com/danystarrkk/nvim /home/stark/.config/nvim
-    sudo git clone https://github.com/danystarrkk/nvim /root/.config/nvim
-    bash /home/stark/.config/nvim/script/base.sh
-
-    if [ $(echo $?) -eq 0 ]; then
-      echo -e "\n${greenColour}[+] Se completo la configuración del Entorno.... ${endColour}"
+    if [ $? -eq 0 ]; then
+      echo -e "\n${greenColour}[+] Se completó la configuración del Entorno.... ${endColour}"
     else
       echo -e "\n${redColour}[!] Error en la configuración del Entorno....${endColour}"
     fi
   else
-    echo -e "${redColour}\n\t[!] Configuración del Entorno Cancelado...\n\n${endColour}"
+    echo -e "${redColour}\n\t[!] Configuración del Entorno Cancelada...\n\n${endColour}"
   fi
 
 }
 
 ##### Orden de Ejecución #########
-
-echo -e "${blueColour}[*] Introduce tu contraseña de sudo (solo te la pediremos esta vez):${endColour}"
-sudo -v
-
-# Bucle en segundo plano que mantiene sudo activo mientras el script esté corriendo
-while true; do
-  sudo -n true
-  sleep 60
-  kill -0 "$$" || exit
-done 2>/dev/null &
-
 installDependencias
 configuracionEntorno
+
+echo -e "${greenColour}[*] Script finalizado. Por favor, reinicia tu terminal (exit y vuelve a ejecutar 'pentest').${endColour}"
