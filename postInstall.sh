@@ -47,8 +47,10 @@ function installDependencias() {
 
     sudo apt update -y && sudo apt upgrade -y
 
+    # Fuentes
     sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
 
+    # Paquetería principal (Sin utilidades de VM ni WM)
     sudo apt install -y dconf-cli libglib2.0-bin papirus-icon-theme pocl-opencl-icd xclip xsel neovim zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev ripgrep unzip wget git curl
 
     if [ $? -eq 0 ]; then
@@ -86,9 +88,15 @@ function configuracionEntorno() {
     sudo cp -r $rutaT/fonts/* /usr/share/fonts
     sudo fc-cache -fv &>/dev/null
 
-    cp -r $rutaT/kitty $rutaP/.config
-    sudo cp -r $rutaT/kitty /root/.config
+    # 2. Configuración de utilidades base (.config)
+    echo -e "${purpleColour}    [+] Estructurando directorios de configuración...${endColour}"
+    mkdir -p $rutaP/.config
+    sudo mkdir -p /root/.config
 
+    cp -r $rutaT/kitty $rutaP/.config/
+    sudo cp -r $rutaT/kitty /root/.config/
+
+    # 3. Zsh y Powerlevel10k
     echo -e "${purpleColour}    [+] Configurando Zsh y P10k...${endColour}"
     sudo mkdir -p /usr/share/zsh-sudo/
     sudo wget -q -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh
@@ -104,8 +112,8 @@ function configuracionEntorno() {
 
     sudo cp $rutaT/files_root/.zshrc /root
     sudo cp $rutaT/files_root/.p10k.zsh /root
-    sudo ln -s -f $rutaP/.zshrc /root/.zshrc
 
+    # 4. FZF
     echo -e "${purpleColour}    [+] Instalando FZF...${endColour}"
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf &>/dev/null
     ~/.fzf/install --all &>/dev/null
@@ -113,15 +121,18 @@ function configuracionEntorno() {
     sudo git clone --depth 1 https://github.com/junegunn/fzf.git /root/.fzf &>/dev/null
     sudo /root/.fzf/install --all &>/dev/null
 
+    # 5. Tema Orchis Dark Compact
     echo -e "${blueColour}[+] Instalando y aplicando tema Orchis-Dark-Compact...${endColour}"
     git clone https://github.com/vinceliuice/Orchis-theme.git /tmp/Orchis-theme &>/dev/null
     /tmp/Orchis-theme/install.sh -t all -c compact -s standard --tweaks solid &>/dev/null
     rm -rf /tmp/Orchis-theme
 
+    # Aplicar a gsettings (Puede fallar si DBus no está listo en el Docker, pero los settings.ini lo respaldan)
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' &>/dev/null
     gsettings set org.gnome.desktop.interface gtk-theme 'Orchis-Dark-Compact' &>/dev/null
     gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' &>/dev/null
 
+    # 6. Forzar configuración GTK por archivos
     mkdir -p ~/.config/gtk-3.0 ~/.config/gtk-4.0
     sudo mkdir -p /root/.config/gtk-3.0 /root/.config/gtk-4.0
 
@@ -157,6 +168,7 @@ EOF
 }
 
 ##### Orden de Ejecución #########
+
 installDependencias
 configuracionEntorno
 
