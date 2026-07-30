@@ -50,7 +50,7 @@ function installDependencias() {
     # Fuentes
     sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
 
-    sudo apt install -y dconf-cli libglib2.0-bin papirus-icon-theme pocl-opencl-icd xclip xsel neovim zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev ripgrep unzip wget git curl xdg-user-dirs
+    sudo apt install -y dconf-cli libglib2.0-bin papirus-icon-theme mesa-opencl-icd ocl-icd-libopencl1 xclip xsel neovim zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev ripgrep unzip wget git curl xdg-user-dirs
 
     if [ $? -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependencias correctamente.....${endColour}"
