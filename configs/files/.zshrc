@@ -66,8 +66,8 @@ export PATH=$PATH:/usr/local/go/bin
 # -----------------------------------------------
 
 function mkhack(){
-  mkdir -p {nmap,content,exploits}
-  touch notas
+  mkdir -p {nmap,content,exploits,burp}
+  touch notas.md
 }
 
 function extractPorts(){
