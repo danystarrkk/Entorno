@@ -48,7 +48,7 @@ function installDependencias() {
 
     sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
 
-    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr ripgrep open-vm-tools open-vm-tools-desktop
+    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr ripgrep open-vm-tools open-vm-tools-desktop mesa-utils
 
     if [ $(echo $?) -eq 0 ]; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
