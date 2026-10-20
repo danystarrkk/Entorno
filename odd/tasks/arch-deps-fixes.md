@@ -4,9 +4,9 @@ Rama `arch` (base e5227fa). Fix de dependencias del installer tras los errores d
 usuario al ejecutarlo: JDK22→JDK21 precompilado, transacción AUR resiliente
 (arc-gtk-theme / i3lock-fancy) e idempotencia anti-duplicados para re-runs de prueba.
 
-Slice boundary registrado: e5227fa acumula 1030 líneas autorizadas / 10 commits sobre
-origin/main (límite ~400 por slice superado) → estrategia: unidades encadenadas; cada
-commit de esta feature es un slice revisable por separado.
+Slice boundary registrado: el límite ~400 líneas/slice está superado — e5227fa cerró en
+1030 líneas / 10 commits sobre origin/main y 59b4bb2 en 1180 / 11 → estrategia:
+unidades encadenadas; cada commit es un slice revisable por separado.
 
 ## Specs
 
@@ -60,9 +60,9 @@ evitar duplicados."
 
 ## Tasks
 
-T9  S1   jdk22-graalvm-bin → jdk21-openjdk en transacción pacman   inline  commit: pendiente
-T10 S2   split AUR guardado + reemplazo i3lock-fancy-git            inline  commit: pendiente
-T11 S3   idempotencia strap/yay/fuentes/plugin zsh-sudo             inline  commit: pendiente
+T9  S1   jdk22-graalvm-bin → jdk21-openjdk en transacción pacman   inline  commit: 59b4bb2
+T10 S2   split AUR guardado + reemplazo i3lock-fancy-git            inline  commit: 59b4bb2
+T11 S3   idempotencia strap/yay/fuentes/plugin zsh-sudo             inline  commit: 59b4bb2
 
 ## Log
 
@@ -81,3 +81,9 @@ L2  Evidencia de investigación: AUR RPC v5 live — arc-gtk-theme 20221218-2 �
     46 paquetes de la línea yay están en repos oficiales. PKGBUILD de
     i3lock-fancy-git: provides=('i3lock-fancy'), make install del script del autor.
     jdk21-openjdk: extra 21.0.12.1.u1 (binario,535 archivos).
+L3  Verificación post-cambio (59b4bb2): bash -n OK; jdk21-openjdk presente y
+    jdk22 solo en comentario; bucle AUR con los 3 paquetes y 0 i3lock-fancy
+    suelto en la línea yay principal (empieza 'dconf glib2 papirus-icon-theme');
+    las 6 guardas anti-duplicados presentes (strap, yay, 2 de fuentes,
+    /usr/share/fonts, plugin zsh-sudo); makepkg aparece solo1 vez y dentro de
+    la guarda de yay.
