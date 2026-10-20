@@ -96,15 +96,19 @@ rendimiento grafico y logico es necesario."
   OpenGL 4.3 con Workstation 17); hoy solo llega como dependencia implícita.
 - libglx-mesa0: proveedor GLX de Mesa — es lo que hace funcionar el backend
   "glx" de picom (S4).
-- xserver-xorg-video-vmware: driver Xorg p/ VMware (KMS vía vmwgfx; fallback si
-  el adaptador es "VMware SVGA" en vez de VMSVGA; arregla el auto-resize del bug
-  Kali 0009441).
+- xserver-xorg-video-vmware: ELIMINADO en hotfix — NO existe en kali-rolling
+  (el tracker pkg.kali.org conserva la página pero el paquete fue retirado,
+  igual que en Arch; Xorg usa el driver modesetting in-tree, suficiente con
+  VMSVGA). Verificado contra el índice binario oficial (Packages.gz de
+  kali-rolling, 71479 paquetes).
 - Descartados tras investigación: xserver-xorg-input-vmmouse (no existe en
   Debian/Kali actual), mesa-va-drivers/mesa-vdpau-drivers (el huésped VMware no
   tiene motor de decodificación), mesa-opencl-icd (solo GPU AMD/Intel real).
 - Ya presentes y confirmados: open-vm-tools + open-vm-tools-desktop (servicio
   habilitado, vmtoolsd/vmware-user-suid-wrapper en bspwmrc), mesa-utils,
   pocl-opencl-icd (OpenCL CPU), vmwgfx in-kernel.
+- Hotfix (L9): fonts-ubuntu fuera (no existe en kali-rolling y ninguna config
+  usa esa fuente); wmname → suckless-tools (Provides: wmname, versión 49-1);
 - Fuera del repo (config lado VMware, aviso al usuario): Display → "Accelerate
   3D graphics" activado y adaptador de vídeo VMSVGA.
 
@@ -166,3 +170,9 @@ L8  Verificación S12 (b78ce5e): bash -n OK; guardas de descarga =3 (Hack,
     JetBrains, plugin zsh), guardas de copia =2 (wallpapers en ~/Imágenes,
     /usr/share/fonts), kitty root =1 (antes 2), sudo touch /root/.zshrc =0,
     4 comentarios Anti-duplicados (S12) en el script.
+L9  Evidencia (análisis de la rama docker): índice binario oficial de kali-rolling
+    (http.kali.org/.../Packages.gz, 71479 paquetes) reveló3 ausentes:
+    "fonts-ubuntu" (solo existe fonts-ubuntu-title, distinta; sin uso en configs),
+    "wmname" (existe via suckless-tools Provides: wmname — se reemplaza) y
+    "xserver-xorg-video-vmware" (retirado de Kali; se elimina de S11). Los otros
+    80+ paquetes de main verificados: OK. Sin esto, apt abortaba bajo set -e.

@@ -55,12 +55,15 @@ function installDependencias() {
 
     sudo apt update -y && sudo apt upgrade -y
 
-    sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-ubuntu fonts-roboto fonts-open-sans
+    sudo apt install -y fonts-dejavu fonts-liberation fonts-noto fonts-noto-cjk fonts-noto-color-emoji fonts-noto-extra fonts-roboto fonts-open-sans
 
-    # Transacción apt única con paquetes de kali-rolling (todos verificados en pkg.kali.org).
+    # Transacción apt única con paquetes de kali-rolling (todos verificados contra
+    # el índice binario oficial Packages.gz de kali-rolling).
     # Kali ya trae las herramientas pentest: no hay AUR/yay ni BlackArch que gestionar.
-    # S11: stack gráfico VMware (vmwgfx 3D + GLX de Mesa + Xorg vmware).
-    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr ripgrep open-vm-tools open-vm-tools-desktop mesa-utils libgl1-mesa-dri libglx-mesa0 xserver-xorg-video-vmware xdg-user-dirs maim dunst libnotify-bin xdotool alsa-utils viewnior i3lock-fancy mpc mpd x11-xkb-utils
+    # S11: stack gráfico VMware (vmwgfx 3D + GLX de Mesa). xserver-xorg-video-
+    # vmware fuera: NO existe en kali-rolling (Kali también lo bajó; Xorg usa el
+    # modesetting in-tree). wmname via suckless-tools (Provides: wmname).
+    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm suckless-tools libglib2.0-dev docker.io docker-compose arandr ripgrep open-vm-tools open-vm-tools-desktop mesa-utils libgl1-mesa-dri libglx-mesa0 xdg-user-dirs maim dunst libnotify-bin xdotool alsa-utils viewnior i3lock-fancy mpc mpd x11-xkb-utils
 
     echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
 
