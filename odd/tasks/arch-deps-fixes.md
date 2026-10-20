@@ -5,8 +5,8 @@ usuario al ejecutarlo: JDK22→JDK21 precompilado, transacción AUR resiliente
 (arc-gtk-theme / i3lock-fancy) e idempotencia anti-duplicados para re-runs de prueba.
 
 Slice boundary registrado: el límite ~400 líneas/slice está superado — e5227fa cerró en
-1030 líneas / 10 commits sobre origin/main y 59b4bb2 en 1180 / 11 → estrategia:
-unidades encadenadas; cada commit es un slice revisable por separado.
+1030 líneas / 10 commits, 59b4bb2 en 1180 / 11 y 923331b en 1217 / 13 sobre origin/main
+→ estrategia: unidades encadenadas; cada commit es un slice revisable por separado.
 
 ## Specs
 
@@ -80,7 +80,7 @@ ciertos filtros para que no se dupliquen y genere errores."
 T9  S1   jdk22-graalvm-bin → jdk21-openjdk en transacción pacman   inline  commit: 59b4bb2
 T10 S2   split AUR guardado + reemplazo i3lock-fancy-git            inline  commit: 59b4bb2
 T11 S3   idempotencia strap/yay/fuentes/plugin zsh-sudo             inline  commit: 59b4bb2
-T12 S4   filtros de configuracionEntorno (kitty dup, wallpapers, touch) inline commit: pendiente
+T12 S4   filtros de configuracionEntorno (kitty dup, wallpapers, touch) inline commit: 923331b
 
 ## Log
 
@@ -107,3 +107,5 @@ L3  Verificación post-cambio (59b4bb2): bash -n OK; jdk21-openjdk presente y
     la guarda de yay.
 L4  "ahora en cuanto a la configuracion del entorno tambien aplica ciertos
     filtros para que no se dupliquen y genere errores." → nueva spec S4 y task T12.
+L5  Verificación S4 (923331b): bash -n OK; copias de kitty root =1 (antes2);
+    sudo touch /root/.zshrc =0; guarda de wallpapers presente (línea185).
