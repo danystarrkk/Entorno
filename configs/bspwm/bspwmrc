@@ -39,8 +39,8 @@ $HOME/.config/polybar/launch.sh &
 # Ajustes r�pidos de una sola ejecuci�n
 # ==========================================
 
-# Fondo de pantalla
-nitrogen --restore &
+# Fondo de pantalla (feh es más liviano que nitrogen en VM)
+feh --no-fehbg --bg-fill "$HOME/Pictures/wallpapers/wallhaven-5y5537_1920x1200.png" &
 
 # Compatibilidad para Java (pantallas grises)
 wmname LG3D &

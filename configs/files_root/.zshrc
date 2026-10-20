@@ -8,8 +8,8 @@ fi
 # Created by newuser for 5.9
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 
-if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 if [ -f /usr/share/zsh-sudo/sudo.plugin.zsh ]; then
@@ -41,7 +41,7 @@ zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p
 zstyle ':completion:*' use-compctl false
 zstyle ':completion:*' verbose true
 
-export PATH=/opt/kitty/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin/:/opt/nvim/bin
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin
  
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
