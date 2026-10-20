@@ -180,7 +180,12 @@ function configuracionEntorno() {
 
     chmod +x $HOME/.config/bspwm/scripts/*
 
-    cp -r $rutaT/wallpapers $rutaP/Pictures
+    # Anti-duplicados (S4): no re-copiar wallpapers si ya están en el destino.
+    if [ -d "$rutaP/Pictures/wallpapers" ]; then
+      echo -e "${yellowColour}    [!] Ya están los wallpapers en $rutaP/Pictures, se omite la copia....${endColour}"
+    else
+      cp -r $rutaT/wallpapers $rutaP/Pictures
+    fi
 
     if [ ! -d "$rutaP/.config/nvim" ]; then
       git clone --depth=1 https://github.com/danystarrkk/nvim "$rutaP/.config/nvim"
@@ -227,8 +232,6 @@ function configuracionEntorno() {
     cp $rutaT/files/.zshrc $HOME
     cp $rutaT/files/.p10k.zsh $HOME
 
-    sudo touch /root/.zshrc
-
     if ! sudo test -d /root/powerlevel10k; then
       sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k &>/dev/null
     else
@@ -240,8 +243,6 @@ function configuracionEntorno() {
 
     sudo cp $rutaT/files_root/.zshrc /root
     sudo cp $rutaT/files_root/.p10k.zsh /root
-
-    sudo cp -r $rutaT/kitty /root/.config/
 
     rm -rf ~/.config/polybar/
     cp -r $rutaT/polybar $HOME/.config

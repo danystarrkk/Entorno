@@ -58,11 +58,29 @@ evitar duplicados."
   git guardados (nvim, p10k x2, fzf x2), /etc/environment con grep -q, tee de
   settings gtk sobrescribe, rm+cp de polybar es diseño.
 
+S4 — Filtros de configuracionEntorno (re-runs)
+Cita usuario: "ahora en cuanto a la configuracion del entorno tambien aplica
+ciertos filtros para que no se dupliquen y genere errores."
+- Quitar la copia DUPLICADA de kitty para root (se copiaba dos veces en la
+  misma corrida: junto al kitty de usuario y otra en el bloque root-zshrc).
+- Guardar la copia de wallpapers: omitir si $rutaP/Pictures/wallpapers ya
+  existe (evita re-copiar MB en cada corrida).
+- Quitar `sudo touch /root/.zshrc`: código muerto (el bloque siguiente lo
+  elimina con rm -rf justo antes del cp definitivo).
+- Las copias de configs (bspwm, sxhkd, picom, kitty, polybar, rofi) SE
+  REFRESCAN a propósito en cada corrida: cp -r con destino existente hace
+  merge (no duplica) y es lo que permite probar edits del repo re-ejecutando
+  el script. Igual los rm+cp de .zshrc/polybar: refresh por diseño.
+- Confirmado sin cambio: fzf install corre tras el cp del .zshrc (bloque
+  agregado una sola vez por corrida), chsh idempotente, systemctl con guarda,
+  gsettings con guarda, tee de gtk sobrescribe, mkdir -p en todos lados.
+
 ## Tasks
 
 T9  S1   jdk22-graalvm-bin → jdk21-openjdk en transacción pacman   inline  commit: 59b4bb2
 T10 S2   split AUR guardado + reemplazo i3lock-fancy-git            inline  commit: 59b4bb2
 T11 S3   idempotencia strap/yay/fuentes/plugin zsh-sudo             inline  commit: 59b4bb2
+T12 S4   filtros de configuracionEntorno (kitty dup, wallpapers, touch) inline commit: pendiente
 
 ## Log
 
@@ -87,3 +105,5 @@ L3  Verificación post-cambio (59b4bb2): bash -n OK; jdk21-openjdk presente y
     las 6 guardas anti-duplicados presentes (strap, yay, 2 de fuentes,
     /usr/share/fonts, plugin zsh-sudo); makepkg aparece solo1 vez y dentro de
     la guarda de yay.
+L4  "ahora en cuanto a la configuracion del entorno tambien aplica ciertos
+    filtros para que no se dupliquen y genere errores." → nueva spec S4 y task T12.
