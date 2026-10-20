@@ -85,6 +85,29 @@ S10 — Rofi
   alarm) en screenshot y guards de command -v i3lock-fancy en powermenu
   (reemplaza tambien el $HOME/.local/bin/lock inexistente).
 
+S11 — Controladores VMware (gráficos y lógicos)
+Cita usuario: "verificame que tengamos los controladores graficos correctos tambien
+recuerda que uso vmware para levantar esos entornos así que todo driver que ayude en
+rendimiento grafico y logico es necesario."
+- Agregar a la transacción apt: libgl1-mesa-dri libglx-mesa0 xserver-xorg-video-vmware.
+- Verificado en kali-rolling (pkg.kali.org): mesa 26.1.6-1 (libgl1-mesa-dri y
+  libglx-mesa0) y xserver-xorg-video-vmware 1:13.4.0-1.
+- libgl1-mesa-dri: contiene vmwgfx_dri.so, el driver 3D de VMware (SVGA3D, hasta
+  OpenGL 4.3 con Workstation 17); hoy solo llega como dependencia implícita.
+- libglx-mesa0: proveedor GLX de Mesa — es lo que hace funcionar el backend
+  "glx" de picom (S4).
+- xserver-xorg-video-vmware: driver Xorg p/ VMware (KMS vía vmwgfx; fallback si
+  el adaptador es "VMware SVGA" en vez de VMSVGA; arregla el auto-resize del bug
+  Kali 0009441).
+- Descartados tras investigación: xserver-xorg-input-vmmouse (no existe en
+  Debian/Kali actual), mesa-va-drivers/mesa-vdpau-drivers (el huésped VMware no
+  tiene motor de decodificación), mesa-opencl-icd (solo GPU AMD/Intel real).
+- Ya presentes y confirmados: open-vm-tools + open-vm-tools-desktop (servicio
+  habilitado, vmtoolsd/vmware-user-suid-wrapper en bspwmrc), mesa-utils,
+  pocl-opencl-icd (OpenCL CPU), vmwgfx in-kernel.
+- Fuera del repo (config lado VMware, aviso al usuario): Display → "Accelerate
+  3D graphics" activado y adaptador de vídeo VMSVGA.
+
 ## Tasks
 
 T1  S1-S3  postInstall.sh overhaul (nvim externo + paquetes apt + robustez)   inline   commit: 87d9fbe
@@ -93,6 +116,7 @@ T3  S5     polybar (colors/config/modules/launch) port de arch                in
 T4  S6,S10  rofi port de arch (rutas/fuentes/powermenu/screenshot) + kitty    inline   commit: e425c07
 T5  S1,S8  borrar configs/nvim + PATH files_root/.zshrc                       inline   commit: 39ec701
 T6  S1-S9  verificación (bash -n, greps por spec) + docs + cierre             inline   commit: 01d8015 + cierre
+T7  S11    drivers VMware gráficos en postInstall.sh                          inline   commit: pendiente
 
 ## Log
 
@@ -115,3 +139,6 @@ L4  Decisión durante T1: /etc/environment mantiene solo las 2 variables de main
 L5  Corrección de doc: los cambios de rofi no tenían spec propia; se agrega S10.
     El mensaje de e425c07 cita "(S4/S2/S6)": las referencias correctas son
     S10 (rofi) y S6 (kitty).
+L6  "verificame que tengamos los controladores graficos correctos tambien
+    recuerda que uso vmware para levantar esos entornos así que todo driver que
+    ayude en rendimiento grafico y logico es necesario." → nueva spec S11 y task T7.

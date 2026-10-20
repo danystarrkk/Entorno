@@ -59,7 +59,8 @@ function installDependencias() {
 
     # Transacción apt única con paquetes de kali-rolling (todos verificados en pkg.kali.org).
     # Kali ya trae las herramientas pentest: no hay AUR/yay ni BlackArch que gestionar.
-    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr ripgrep open-vm-tools open-vm-tools-desktop mesa-utils xdg-user-dirs maim dunst libnotify-bin xdotool alsa-utils viewnior i3lock-fancy mpc mpd x11-xkb-utils
+    # S11: stack gráfico VMware (vmwgfx 3D + GLX de Mesa + Xorg vmware).
+    sudo apt install -y dconf-cli libglib2.0-bin arc-theme papirus-icon-theme flameshot pocl-opencl-icd xclip xsel neovim x11-xserver-utils bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm wmname libglib2.0-dev docker.io docker-compose arandr ripgrep open-vm-tools open-vm-tools-desktop mesa-utils libgl1-mesa-dri libglx-mesa0 xserver-xorg-video-vmware xdg-user-dirs maim dunst libnotify-bin xdotool alsa-utils viewnior i3lock-fancy mpc mpd x11-xkb-utils
 
     echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
 
