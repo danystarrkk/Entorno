@@ -108,6 +108,22 @@ rendimiento grafico y logico es necesario."
 - Fuera del repo (config lado VMware, aviso al usuario): Display → "Accelerate
   3D graphics" activado y adaptador de vídeo VMSVGA.
 
+S12 — Filtros anti-duplicados (paquetes y configuración) orientados a Kali
+Cita usuario: "listo vamos a generar los mismo filtros de seguridad para duplicados
+en paquetes y en configuraciones en la rama de kali y orientado al kali."
+- Paquetes/descargas: omitir wget/unzip de fuentes si configs/fonts/HackNerdFonts
+  (o JetBrainsMono) no está vacío; copia a /usr/share/fonts + fc-cache solo si
+  /usr/share/fonts/HackNerdFonts no existe; plugin sudo de zsh sin re-descarga si
+  ya existe. Clones git ya guardados (nvim, p10k x2, fzf x2) y apt es
+  naturalmente idempotente (re-instalar = no-op) → sin cambios ahí.
+- Sin strap.sh/yay/BlackArch en Kali: no hay bootstrap que verificar.
+- configuracionEntorno: quitar la copia DUPLICADA de kitty para root (2 en la
+  misma corrida); quitar `sudo touch /root/.zshrc` (muerto: rm -rf le sigue);
+  guardar la copia de wallpapers si $rutaP/Imágenes/wallpapers ya existe.
+- Se REFRESCAN a propósito (sin guarda): copias de configs (bspwm, sxhkd, picom,
+  kitty, polybar, rofi), rm+cp de .zshrc/polybar, settings gtk con tee — merge de
+  cp -r no duplica y permite probar edits del repo re-ejecutando el script.
+
 ## Tasks
 
 T1  S1-S3  postInstall.sh overhaul (nvim externo + paquetes apt + robustez)   inline   commit: 87d9fbe
@@ -117,6 +133,7 @@ T4  S6,S10  rofi port de arch (rutas/fuentes/powermenu/screenshot) + kitty    in
 T5  S1,S8  borrar configs/nvim + PATH files_root/.zshrc                       inline   commit: 39ec701
 T6  S1-S9  verificación (bash -n, greps por spec) + docs + cierre             inline   commit: 01d8015 + cierre
 T7  S11    drivers VMware gráficos en postInstall.sh                          inline   commit: d5896e4
+T8  S12    filtros anti-duplicados paquetes+config                            inline   commit: pendiente
 
 ## Log
 
@@ -142,3 +159,6 @@ L5  Corrección de doc: los cambios de rofi no tenían spec propia; se agrega S1
 L6  "verificame que tengamos los controladores graficos correctos tambien
     recuerda que uso vmware para levantar esos entornos así que todo driver que
     ayude en rendimiento grafico y logico es necesario." → nueva spec S11 y task T7.
+L7  "listo vamos a generar los mismo filtros de seguridad para duplicados en
+    paquetes y en configuraciones en la rama de kali y orientado al kali." →
+    nueva spec S12 y task T8 (port de arch-deps-fixes S3/S4 adaptado a apt/Kali).

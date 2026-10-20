@@ -80,15 +80,25 @@ function configuracionEntorno() {
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
     xdg-user-dirs-update --force
-    wget -P "$rutaT" https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
-    mkdir -p "$rutaT/fonts/HackNerdFonts"
-    unzip -o "$rutaT/Hack.zip" -d "$rutaT/fonts/HackNerdFonts"
-    rm -rf "$rutaT/Hack.zip"
 
-    wget -P "$rutaT" https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
-    mkdir -p "$rutaT/fonts/JetBrainsMono"
-    unzip -o "$rutaT/JetBrainsMono.zip" -d "$rutaT/fonts/JetBrainsMono"
-    rm -rf "$rutaT/JetBrainsMono.zip"
+    # Anti-duplicados (S12): solo descargar/descomprimir si la fuente aún no está.
+    if [ -n "$(ls -A "$rutaT/fonts/HackNerdFonts" 2>/dev/null)" ]; then
+      echo -e "${yellowColour}    [!] Ya están las fuentes HackNerdFonts, se omite la descarga....${endColour}"
+    else
+      wget -P "$rutaT" https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+      mkdir -p "$rutaT/fonts/HackNerdFonts"
+      unzip -o "$rutaT/Hack.zip" -d "$rutaT/fonts/HackNerdFonts"
+      rm -rf "$rutaT/Hack.zip"
+    fi
+
+    if [ -n "$(ls -A "$rutaT/fonts/JetBrainsMono" 2>/dev/null)" ]; then
+      echo -e "${yellowColour}    [!] Ya están las fuentes JetBrainsMono, se omite la descarga....${endColour}"
+    else
+      wget -P "$rutaT" https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
+      mkdir -p "$rutaT/fonts/JetBrainsMono"
+      unzip -o "$rutaT/JetBrainsMono.zip" -d "$rutaT/fonts/JetBrainsMono"
+      rm -rf "$rutaT/JetBrainsMono.zip"
+    fi
 
     mkdir -p "$rutaP/.config/bin"
     touch "$rutaP/.config/bin/target"
@@ -101,8 +111,13 @@ function configuracionEntorno() {
 
     chmod +x "$HOME/.config/bspwm/scripts/"*
 
+    # Anti-duplicados (S12): no re-copiar wallpapers si ya están en el destino.
     mkdir -p "$rutaP/Imágenes"
-    cp -r "$rutaT/wallpapers" "$rutaP/Imágenes"
+    if [ -d "$rutaP/Imágenes/wallpapers" ]; then
+      echo -e "${yellowColour}    [!] Ya están los wallpapers en $rutaP/Imágenes, se omite la copia....${endColour}"
+    else
+      cp -r "$rutaT/wallpapers" "$rutaP/Imágenes"
+    fi
 
     # Neovim externo: solo usuario, sin nvim para root
     if [ ! -d "$rutaP/.config/nvim" ]; then
@@ -114,14 +129,24 @@ function configuracionEntorno() {
     cp -r "$rutaT/kitty" "$rutaP/.config"
     sudo cp -r "$rutaT/kitty" /root/.config
 
-    sudo cp -r "$rutaT/fonts/"* /usr/share/fonts
-    sudo fc-cache -fv
+    # Anti-duplicados (S12): copiar fuentes al sistema solo si no están.
+    if [ -d /usr/share/fonts/HackNerdFonts ]; then
+      echo -e "${yellowColour}    [!] Ya están las fuentes en /usr/share/fonts, se omite la copia....${endColour}"
+    else
+      sudo cp -r "$rutaT/fonts/"* /usr/share/fonts
+      sudo fc-cache -fv
+    fi
 
     cp -r "$rutaT/picom" "$rutaP/.config"
 
     sudo mkdir -p /usr/share/zsh-sudo/
 
-    sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
+    # Anti-duplicados (S12): no re-descargar el plugin si ya existe.
+    if [ -f /usr/share/zsh-sudo/sudo.plugin.zsh ]; then
+      echo -e "${yellowColour}    [!] Ya existe el plugin sudo de zsh, se omite la descarga....${endColour}"
+    else
+      sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
+    fi
 
     sudo systemctl enable open-vm-tools.service || echo -e "${yellowColour}[!] No se pudo habilitar open-vm-tools.service, se continúa....${endColour}"
     sudo systemctl enable docker.service || echo -e "${yellowColour}[!] No se pudo habilitar docker.service, se continúa....${endColour}"
@@ -140,8 +165,6 @@ function configuracionEntorno() {
     cp "$rutaT/files/.zshrc" "$HOME"
     cp "$rutaT/files/.p10k.zsh" "$HOME"
 
-    sudo touch /root/.zshrc
-
     if ! sudo test -d /root/powerlevel10k; then
       sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/powerlevel10k &>/dev/null
     else
@@ -153,8 +176,6 @@ function configuracionEntorno() {
 
     sudo cp "$rutaT/files_root/.zshrc" /root
     sudo cp "$rutaT/files_root/.p10k.zsh" /root
-
-    sudo cp -r "$rutaT/kitty" /root/.config/
 
     rm -rf "$HOME/.config/polybar/"
     cp -r "$rutaT/polybar" "$HOME/.config"
