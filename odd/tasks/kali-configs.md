@@ -116,7 +116,7 @@ T3  S5     polybar (colors/config/modules/launch) port de arch                in
 T4  S6,S10  rofi port de arch (rutas/fuentes/powermenu/screenshot) + kitty    inline   commit: e425c07
 T5  S1,S8  borrar configs/nvim + PATH files_root/.zshrc                       inline   commit: 39ec701
 T6  S1-S9  verificación (bash -n, greps por spec) + docs + cierre             inline   commit: 01d8015 + cierre
-T7  S11    drivers VMware gráficos en postInstall.sh                          inline   commit: pendiente
+T7  S11    drivers VMware gráficos en postInstall.sh                          inline   commit: d5896e4
 
 ## Log
 
