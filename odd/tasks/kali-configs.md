@@ -133,7 +133,7 @@ T4  S6,S10  rofi port de arch (rutas/fuentes/powermenu/screenshot) + kitty    in
 T5  S1,S8  borrar configs/nvim + PATH files_root/.zshrc                       inline   commit: 39ec701
 T6  S1-S9  verificación (bash -n, greps por spec) + docs + cierre             inline   commit: 01d8015 + cierre
 T7  S11    drivers VMware gráficos en postInstall.sh                          inline   commit: d5896e4
-T8  S12    filtros anti-duplicados paquetes+config                            inline   commit: pendiente
+T8  S12    filtros anti-duplicados paquetes+config                            inline   commit: b78ce5e
 
 ## Log
 
@@ -162,3 +162,7 @@ L6  "verificame que tengamos los controladores graficos correctos tambien
 L7  "listo vamos a generar los mismo filtros de seguridad para duplicados en
     paquetes y en configuraciones en la rama de kali y orientado al kali." →
     nueva spec S12 y task T8 (port de arch-deps-fixes S3/S4 adaptado a apt/Kali).
+L8  Verificación S12 (b78ce5e): bash -n OK; guardas de descarga =3 (Hack,
+    JetBrains, plugin zsh), guardas de copia =2 (wallpapers en ~/Imágenes,
+    /usr/share/fonts), kitty root =1 (antes 2), sudo touch /root/.zshrc =0,
+    4 comentarios Anti-duplicados (S12) en el script.
