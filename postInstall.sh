@@ -57,22 +57,27 @@ function installDependencias() {
 
     sudo pacman -S --needed --noconfirm base-devel git
 
-    echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
-
-    strapDir="$(mktemp -d)"
-
-    if curl -fsSL -o "${strapDir}/strap.sh" https://blackarch.org/strap.sh &&
-      curl -fsSL -o "${strapDir}/strap.sh.sha1" https://blackarch.org/strap.sh.sha1 &&
-      (cd "${strapDir}" && sha1sum -c strap.sh.sha1); then
-      chmod +x "${strapDir}/strap.sh"
-      sudo "${strapDir}/strap.sh" || echo -e "${yellowColour}[!] Falló la ejecución de strap.sh, se continúa sin el repositorio BlackArch....${endColour}"
+    # Anti-duplicados (S3): si BlackArch ya está habilitado, no volver a correr strap.sh.
+    if grep -qE '^[[:space:]]*\[blackarch\]' /etc/pacman.conf; then
+      echo -e "${yellowColour}[!] El repositorio BlackArch ya está habilitado, se omite strap.sh....${endColour}"
     else
-      echo -e "${yellowColour}[!] Falló la descarga o la verificación SHA1 de strap.sh, se continúa sin el repositorio BlackArch....${endColour}"
+      echo -e "${blueColour}[+] Instalando repositorio BlackArch...${endColour}"
+
+      strapDir="$(mktemp -d)"
+
+      if curl -fsSL -o "${strapDir}/strap.sh" https://blackarch.org/strap.sh &&
+        curl -fsSL -o "${strapDir}/strap.sh.sha1" https://blackarch.org/strap.sh.sha1 &&
+        (cd "${strapDir}" && sha1sum -c strap.sh.sha1); then
+        chmod +x "${strapDir}/strap.sh"
+        sudo "${strapDir}/strap.sh" || echo -e "${yellowColour}[!] Falló la ejecución de strap.sh, se continúa sin el repositorio BlackArch....${endColour}"
+      else
+        echo -e "${yellowColour}[!] Falló la descarga o la verificación SHA1 de strap.sh, se continúa sin el repositorio BlackArch....${endColour}"
+      fi
+
+      rm -rf "${strapDir}"
+
+      sudo pacman -Syu
     fi
-
-    rm -rf "${strapDir}"
-
-    sudo pacman -Syu
 
     # Transacción pacman SOLO con paquetes de repos oficiales.
     # Equivalente S11 (stack grafico VMware): mesa = DRI vmwgfx + GLX de Mesa,
@@ -80,7 +85,8 @@ function installDependencias() {
     # glamor). xf86-video-vmware NO: caido de los repos oficiales desde
     # jun-2025 y archivado upstream; con VMSVGA el camino soportado es
     # modesetting + vmwgfx + mesa.
-    sudo pacman -S --noconfirm --needed nautilus nmap arp-scan gobuster openbsd-netcat openssh python wget ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs mesa mesa-utils xorg-server
+    # S1: jdk21-openjdk = JDK21 binario oficial (extra), sin compilar.
+    sudo pacman -S --noconfirm --needed nautilus nmap arp-scan gobuster openbsd-netcat openssh python wget ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs mesa mesa-utils xorg-server jdk21-openjdk
 
     if grep -qE '^[[:space:]]*\[blackarch\]' /etc/pacman.conf; then
       echo -e "${blueColour}[+] Instalando herramientas de BlackArch...${endColour}"
@@ -94,21 +100,38 @@ function installDependencias() {
 
     echo -e "${blueColour}[+] Instalando yay ${endColour}\n"
 
-    if [ ! -d "${rutaT}/yay" ]; then
-      git clone https://aur.archlinux.org/yay.git "${rutaT}/yay"
+    # Anti-duplicados (S3): si yay ya está instalado, no clonar ni compilar nada.
+    if command -v yay >/dev/null 2>&1; then
+      echo -e "${yellowColour}    [!] Ya está instalado yay, se omite la compilación....${endColour}"
     else
-      echo -e "${yellowColour}    [!] Ya existe ${rutaT}/yay, se omite la clonación....${endColour}"
+      if [ ! -d "${rutaT}/yay" ]; then
+        git clone https://aur.archlinux.org/yay.git "${rutaT}/yay"
+      else
+        echo -e "${yellowColour}    [!] Ya existe ${rutaT}/yay, se omite la clonación....${endColour}"
+      fi
+
+      cd "${rutaT}/yay"
+      makepkg -si
+      cd "${rutaE}"
     fi
 
-    cd "${rutaT}/yay"
-    makepkg -si
-    cd "${rutaE}"
-
-    if yay -S --noconfirm dconf glib2 arc-gtk-theme papirus-icon-theme jdk22-graalvm-bin net-tools flameshot pocl xclip xsel neovim xorg-xsetroot vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm arandr nitrogen less tree ripgrep maim dunst libnotify xdotool alsa-utils viewnior i3lock-fancy mpc xorg-xrandr xorg-setxkbmap; then
+    # SOLO paquetes de repos oficiales verificados (archlinux.org API).
+    # Los AUR van en el bucle guardado de abajo: un target inexistente no debe
+    # abortar esta transacción completa (misma lección que BlackArch roto).
+    if yay -S --noconfirm dconf glib2 papirus-icon-theme net-tools flameshot pocl xclip xsel neovim xorg-xsetroot vim zsh bspwm sxhkd picom polybar rofi feh kitty zsh-syntax-highlighting bat lsd npm open-vm-tools wmname dash glib2-devel gtkmm3 firefox docker docker-compose unzip sddm arandr less tree ripgrep maim dunst libnotify xdotool alsa-utils viewnior mpc xorg-xrandr xorg-setxkbmap; then
       echo -e "${greenColour}    [+] Instalación de dependecias correctamente.....${endColour}"
     else
       echo -e "${redColour}    [!] Error en la Instalación de Dependencias....${endColour}"
     fi
+
+    # Paquetes AUR uno por uno (S2): si alguno falla o no existe, aviso y continúa.
+    # jdk22-graalvm-bin fuera: S1 lo reemplaza por jdk21-openjdk de repo.
+    # i3lock-fancy no existe en AUR ni en repo: se usa i3lock-fancy-git (binario i3lock-fancy).
+    for pkgAur in arc-gtk-theme nitrogen i3lock-fancy-git; do
+      if ! yay -S --noconfirm --needed "$pkgAur"; then
+        echo -e "${yellowColour}[!] Falló el paquete AUR ${pkgAur}, se continúa sin él....${endColour}"
+      fi
+    done
 
   else
     echo -e "\n\t${redColour}[!] No se instalaran las dependecias, no se recomienda omitir este paso...  ${endColour}"
@@ -126,15 +149,25 @@ function configuracionEntorno() {
     echo -e "\n${turquoiseColour}[+] Configuración del Entorno: ${endColour}"
 
     xdg-user-dirs-update --force
-    wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
-    mkdir -p $rutaT/fonts/HackNerdFonts
-    unzip -o $rutaT/Hack.zip -d $rutaT/fonts/HackNerdFonts
-    rm -rf $rutaT/Hack.zip
 
-    wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
-    mkdir -p $rutaT/fonts/JetBrainsMono
-    unzip -o $rutaT/JetBrainsMono.zip -d $rutaT/fonts/JetBrainsMono
-    rm -rf $rutaT/JetBrainsMono.zip
+    # Anti-duplicados (S3): solo descargar/descomprimir si la fuente aún no está.
+    if [ -n "$(ls -A "$rutaT/fonts/HackNerdFonts" 2>/dev/null)" ]; then
+      echo -e "${yellowColour}    [!] Ya están las fuentes HackNerdFonts, se omite la descarga....${endColour}"
+    else
+      wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+      mkdir -p $rutaT/fonts/HackNerdFonts
+      unzip -o $rutaT/Hack.zip -d $rutaT/fonts/HackNerdFonts
+      rm -rf $rutaT/Hack.zip
+    fi
+
+    if [ -n "$(ls -A "$rutaT/fonts/JetBrainsMono" 2>/dev/null)" ]; then
+      echo -e "${yellowColour}    [!] Ya están las fuentes JetBrainsMono, se omite la descarga....${endColour}"
+    else
+      wget -P $rutaT https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
+      mkdir -p $rutaT/fonts/JetBrainsMono
+      unzip -o $rutaT/JetBrainsMono.zip -d $rutaT/fonts/JetBrainsMono
+      rm -rf $rutaT/JetBrainsMono.zip
+    fi
 
     mkdir -p $rutaP/.config/bin
     touch $rutaP/.config/bin/target
@@ -158,14 +191,24 @@ function configuracionEntorno() {
     cp -r $rutaT/kitty $rutaP/.config
     sudo cp -r $rutaT/kitty /root/.config
 
-    sudo cp -r $rutaT/fonts/* /usr/share/fonts
-    sudo fc-cache -fv
+    # Anti-duplicados (S3): copiar fuentes al sistema solo si no están.
+    if [ -d /usr/share/fonts/HackNerdFonts ]; then
+      echo -e "${yellowColour}    [!] Ya están las fuentes en /usr/share/fonts, se omite la copia....${endColour}"
+    else
+      sudo cp -r $rutaT/fonts/* /usr/share/fonts
+      sudo fc-cache -fv
+    fi
 
     cp -r $rutaT/picom $rutaP/.config
 
     sudo mkdir -p /usr/share/zsh-sudo/
 
-    sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
+    # Anti-duplicados (S3): no re-descargar el plugin si ya existe.
+    if [ -f /usr/share/zsh-sudo/sudo.plugin.zsh ]; then
+      echo -e "${yellowColour}    [!] Ya existe el plugin sudo de zsh, se omite la descarga....${endColour}"
+    else
+      sudo wget -O /usr/share/zsh-sudo/sudo.plugin.zsh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh &>/dev/null
+    fi
     sudo systemctl enable vmtoolsd.service || echo -e "${yellowColour}[!] No se pudo habilitar vmtoolsd.service, se continúa....${endColour}"
     sudo systemctl enable vmware-vmblock-fuse.service || echo -e "${yellowColour}[!] No se pudo habilitar vmware-vmblock-fuse.service, se continúa....${endColour}"
     sudo systemctl enable docker.service || echo -e "${yellowColour}[!] No se pudo habilitar docker.service, se continúa....${endColour}"
