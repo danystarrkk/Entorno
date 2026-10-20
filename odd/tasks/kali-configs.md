@@ -92,7 +92,7 @@ T2  S4     picom.conf port de arch                                            in
 T3  S5     polybar (colors/config/modules/launch) port de arch                inline   commit: 27acad2
 T4  S6,S10  rofi port de arch (rutas/fuentes/powermenu/screenshot) + kitty    inline   commit: e425c07
 T5  S1,S8  borrar configs/nvim + PATH files_root/.zshrc                       inline   commit: 39ec701
-T6  S1-S9  verificación (bash -n, greps por spec) + docs + cierre             inline   commit: pendiente (docs)
+T6  S1-S9  verificación (bash -n, greps por spec) + docs + cierre             inline   commit: 01d8015 + cierre
 
 ## Log
 
