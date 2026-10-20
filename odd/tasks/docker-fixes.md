@@ -1,5 +1,8 @@
 # Feature: docker-fixes — overhaul Kali orientado a Docker en la rama docker
 
+Slice boundary registrado: docker vs origin/main = 3777 líneas / 28 commits (historia
+propia de la rama + este trabajo) → estrategia: unidades encadenadas por commit.
+
 Rama `docker` (tracking origin/docker, punta 21cde52, fork de main en f7bd997).
 Análisis completo previo: nació como Docker en Arch y migró a Kali; conserva SOLO
 configs/files/* (zshrc/p10k), configs/kitty/* y postInstall.sh (178 líneas) — sin
@@ -90,10 +93,10 @@ tambien configuralo."
 
 ## Tasks
 
-T1  S1,S5  robustez + filtros anti-duplicados en postInstall.sh   inline  commit: pendiente
-T2  S2-S4  paquetes verificados + nvim externo + fuente kitty     inline  commit: pendiente
-T3  S1-S6  verificación por spec + cierre docs + Engram           inline  commit: pendiente
-T4  S7     GPU real vía túnel: vulkan/VA + diagnóstico /dev/dri   inline  commit: pendiente
+T1  S1,S5  robustez + filtros anti-duplicados en postInstall.sh   inline  commit: fe6a38c
+T2  S2-S4  paquetes verificados + nvim externo + fuente kitty     inline  commit: fe6a38c
+T3  S1-S6  verificación por spec + cierre docs + Engram           inline  commit: pendiente (docs)
+T4  S7     GPU real vía túnel: vulkan/VA + diagnóstico /dev/dri   inline  commit: fe6a38c
 
 ## Log
 
@@ -111,3 +114,11 @@ L3  "toma en cuenta que es un invitado docker al cual le aplicamos esa
     ejecuta cosas graficas así que lo que son implementaciones graficas como
     vulkan o mesa tiene que estar devido a que por tunel conecto mi grafica real
     al docker y lo hago, esto tambien configuralo." → nueva spec S7 y task T4.
+L4  Verificación (fe6a38c): bash -n OK; S1 completa (set -e/trap/130/BASH_SOURCE/
+    defaults/sudo -v, restos viejos=0); wmname/fonts-ubuntu SOLO en comentarios
+    (0 en líneas apt); los5 paquetes nuevos confirmados en el índice binario;
+    nvim clone guardado; kitty 'Hack Nerd Font';9 guardas 'se omite';
+    /etc/environment con grep -qxF; bloque S7 (/dev/dri, grupos, vulkaninfo)
+    presente. Incidente de sesión: el primer write del script cayó en main por
+    no volver de la rama del hotfix — main restaurado desde c992bde y todo
+    re-aplicado en docker (verificado con git branch en el commit).
