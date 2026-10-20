@@ -8,7 +8,7 @@ if [[ "$DIR" == "powermenus" ]]; then
   ddir="$HOME/.config/rofi/config"
   shutdown="󰐥"
   reboot="󰜉"
-  lock="󰍁"
+  lock="󰌾"
   suspend="󰒲"
   logout="󰍃 "
 else
@@ -20,29 +20,29 @@ else
   if [[ "$layout" == "TRUE" ]]; then
     # Section 1
 
-    #		shutdown=""
-    #		reboot=""
-    #		lock=""
-    #		suspend=""
-    #		logout=""
+    #		shutdown="󰐥"
+    #		reboot="󰜉"
+    #		lock="󰌾"
+    #		suspend="󰒲"
+    #		logout="󰍃"
     # Section 2
     shutdown="󰐥"
     reboot="󰜉"
-    lock="󰍁"
+    lock="󰌾"
     suspend="󰒲"
     logout="󰍃 "
 
   else
     # Section 1
-    #		shutdown=" Shutdown"
-    #		reboot=" Restart"
-    #		lock=" Lock"
-    #		suspend=" Sleep"
-    #		logout=" Logout"
+    #		shutdown="󰐥 Shutdown"
+    #		reboot="󰜉 Restart"
+    #		lock="󰌾 Lock"
+    #		suspend="󰒲 Sleep"
+    #		logout="󰍃 Logout"
     # Section 2
     shutdown="󰐥Shutdown"
     reboot="󰜉 Restart"
-    lock="󰍁 Lock"
+    lock="󰌾 Lock"
     suspend="󰒲Sleep"
     logout="󰍃 Logout"
   fi
@@ -86,14 +86,22 @@ $reboot)
   fi
   ;;
 $lock)
-  i3lock-fancy
+  if command -v i3lock-fancy >/dev/null 2>&1; then
+    i3lock-fancy
+  else
+    show_msg
+  fi
   ;;
 $suspend)
   ans=$(rdialog &)
   if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
     mpc -q pause
     amixer set Master mute
-    sh $HOME/.local/bin/lock
+    if command -v i3lock-fancy >/dev/null 2>&1; then
+      i3lock-fancy
+    else
+      show_msg
+    fi
     systemctl suspend
   elif [[ $ans == "no" ]] || [[ $ans == "NO" ]] || [[ $ans == "n" ]]; then
     exit

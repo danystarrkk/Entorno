@@ -1,8 +1,8 @@
 configuration{
     modi: "run,drun,window";
-    icon-theme: "Oranchelo";
+    icon-theme: "Papirus-Dark";
     show-icons: true;
-    terminal: "alacritty";
+    terminal: "kitty";
     drun-display-format: "{icon} {name}";
     location: 0;
     disable-history: false;
@@ -16,4 +16,4 @@ configuration{
 
 //@theme "catppuccin-mocha"
 
-@theme "/home/stark/.local/share/rofi/themes/catppuccin-frappe.rasi"
+@theme "themes/catppuccin-frappe.rasi"
