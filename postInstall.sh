@@ -74,7 +74,13 @@ function installDependencias() {
 
     sudo pacman -Syu
 
-    sudo pacman -S --noconfirm --needed nautilus nmap arp-scan gobuster openbsd-netcat openssh python wget ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs
+    # Transacción pacman SOLO con paquetes de repos oficiales.
+    # Equivalente S11 (stack grafico VMware): mesa = DRI vmwgfx + GLX de Mesa,
+    # mesa-utils = glxinfo, xorg-server = servidor + driver modesetting (con
+    # glamor). xf86-video-vmware NO: caido de los repos oficiales desde
+    # jun-2025 y archivado upstream; con VMSVGA el camino soportado es
+    # modesetting + vmwgfx + mesa.
+    sudo pacman -S --noconfirm --needed nautilus nmap arp-scan gobuster openbsd-netcat openssh python wget ttf-dejavu ttf-liberation noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-ubuntu-font-family ttf-opensans ttf-roboto adobe-source-han-sans-otc-fonts adobe-source-han-serif-otc-fonts xdg-user-dirs mesa mesa-utils xorg-server
 
     if grep -qE '^[[:space:]]*\[blackarch\]' /etc/pacman.conf; then
       echo -e "${blueColour}[+] Instalando herramientas de BlackArch...${endColour}"
